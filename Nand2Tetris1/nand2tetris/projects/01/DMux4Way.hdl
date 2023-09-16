@@ -19,11 +19,8 @@ CHIP DMux4Way {
     DMux (in=in, sel=sel[0], a=outa, b=outb);
     DMux (in=in, sel=sel[0], a=outc, b=outd);
 
-    Or (a=false, b=sel[1], out=selab);
-    Mux (a=outa, b=false, sel=selab, out=a);
-    Mux (a=outb, b=false, sel=selab, out=b);
-
-    And (a=true, b=sel[1], out=selcd);
-    Mux (a=false, b=outc, sel=selcd, out=c);
-    Mux (a=false, b=outd, sel=selcd, out=d);
+    Mux (a=outa, b=false, sel=sel[1], out=a);
+    Mux (a=outb, b=false, sel=sel[1], out=b);
+    Mux (a=false, b=outc, sel=sel[1], out=c);
+    Mux (a=false, b=outd, sel=sel[1], out=d);
 }

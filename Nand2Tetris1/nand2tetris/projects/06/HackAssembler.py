@@ -1,18 +1,67 @@
-filename = "asm"
+# A function, considering an addr in decimal base
+def A_Instruction(addr):
+    bin_represent = "{0:b}".format(int(addr))
+    ans = "0" * (16 - len(bin_represent)) + bin_represent
+    print(ans)
 
-asm = open(f"./Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.asm")
-lines = asm.readlines()
+# C function
+def C_Instruction(line):
+    dest = line.find('=')
+    jump = line.find(';')
 
-st_var = {}
-st_dest = {}
-st_comp = {}
-st_jump = {}
+    if dest == -1:
+        l = 0
+    else:
+        l = dest + 1
+    if jump == -1:
+        r = len(line)
+    else:
+        r = jump
 
+    comp = line[l:r]
+
+    if dest == -1:
+        dest = st_dest["null"]
+    else:
+        dest = st_dest[line[:dest]]
+    if jump == -1:
+        jump = st_jump["null"]
+    else:
+        jump = st_jump[line[jump + 1:]]
+
+    print("111" + st_comp[comp] + dest + jump)
+
+# Functions that initiate the symbol tables
 def init_sts():
     init_st_var()
     init_st_dest()
     init_st_comp()
     init_st_jump()
+
+def init_st_var():
+    st_var["R0"] = "0"
+    st_var["R1"] = "1"
+    st_var["R2"] = "2"
+    st_var["R3"] = "3"
+    st_var["R4"] = "4"
+    st_var["R5"] = "5"
+    st_var["R6"] = "6"
+    st_var["R7"] = "7"
+    st_var["R8"] = "8"
+    st_var["R9"] = "9"
+    st_var["R10"] = "10"
+    st_var["R11"] = "11"
+    st_var["R12"] = "12"
+    st_var["R13"] = "13"
+    st_var["R14"] = "14"
+    st_var["R15"] = "15"
+    st_var["SCREEN"] = "16384"
+    st_var["KBD"] = "24576"
+    st_var["SP"] = "0"
+    st_var["LCL"] = "1"
+    st_var["ARG"] = "2"
+    st_var["THIS"] = "3"
+    st_var["THAT"] = "4"
 
 def init_st_dest():
     st_dest["null"] = "000"
@@ -66,9 +115,24 @@ def init_st_jump():
     st_jump["JLE"] = "110"
     st_jump["JMP"] = "111"
 
-def A_Instruction(line):
-    bin_represent = "{0:b}".format(int(line))
-    ans = "0" * (16 - len(bin_represent)) + bin_represent
-    print(ans)
+# Check if some variable are in st_var
+def var_exists(var):
+    return not (st_var.get(var) == None)
+
+# Main part
 
 # with open(f"Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.hack", "w") as file:
+filename = "asm"
+
+asm = open(f"./Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.asm")
+lines = asm.readlines()
+
+pointer = 16
+st_var = {}
+st_dest = {}
+st_comp = {}
+st_jump = {}
+init_sts()
+
+for line in lines:
+    C_Instruction(line)

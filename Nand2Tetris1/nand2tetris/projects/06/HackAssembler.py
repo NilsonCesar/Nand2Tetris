@@ -1,14 +1,10 @@
-# Main part
-
-# with open(f"Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.hack", "w") as file:
-# file.write()
-# file.write("\n")
 filename = "asm"
 
 asm = open(f"./Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.asm")
 lines = asm.readlines()
 second_program = []
 to_assembly = []
+machine_code = []
 
 st_var = {}
 st_dest = {}
@@ -19,7 +15,7 @@ st_jump = {}
 def A_Instruction(addr):
     bin_represent = "{0:b}".format(int(addr))
     ans = "0" * (16 - len(bin_represent)) + bin_represent
-    print(ans)
+    return ans
 
 # C function
 def C_Instruction(line):
@@ -46,7 +42,7 @@ def C_Instruction(line):
     else:
         jump = st_jump[line[jump + 1:]]
 
-    print("111" + st_comp[comp] + dest + jump)
+    return "111" + st_comp[comp] + dest + jump
 
 # Functions that initiate the symbol tables
 def init_sts():
@@ -194,6 +190,20 @@ def second_pass(program):
             new_line = line
         to_assembly.append(new_line)
 
+def assembly(assembly_code):
+    for line in assembly_code:
+        new_line = ""
+        if line[0] == "@":
+            new_line = A_Instruction(line[1:])
+        else:
+            new_line = C_Instruction(line)
+        machine_code.append(new_line)
 
 first_pass(lines)
 second_pass(second_program)
+assembly(to_assembly)
+
+with open(f"Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.hack", "w") as file:
+    for line in machine_code:
+        file.write(line)
+        file.write("\n")

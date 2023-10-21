@@ -1,3 +1,20 @@
+# Main part
+
+# with open(f"Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.hack", "w") as file:
+# file.write()
+# file.write("\n")
+filename = "asm"
+
+asm = open(f"./Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.asm")
+lines = asm.readlines()
+second_program = []
+to_assembly = []
+
+st_var = {}
+st_dest = {}
+st_comp = {}
+st_jump = {}
+
 # A function, considering an addr in decimal base
 def A_Instruction(addr):
     bin_represent = "{0:b}".format(int(addr))
@@ -132,48 +149,51 @@ def format_line(line):
 
 # Return the address memorie taken as input v, where v is the number/symbol in @v
 # If he should, the env will be added with a new variable v
-def manipulate_memorie(value, mem=-1):
+def manipulate_memorie(value, pointer, mem=-1):
     try:
         addr = int(value)
         return addr
     except:
         if var_exists(value):
-            return st_var[value]
+            return [st_var[value], 0]
         else:
             if mem == -1:
                 st_var[value] = pointer
                 pointer += 1
-                return pointer - 1
             else:
                 st_var[value] = mem
-                return pointer
+        return [pointer, 1]
 
-# Main part
-
-# with open(f"Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.hack", "w") as file:
-# file.write()
-# file.write("\n")
-filename = "asm"
-
-asm = open(f"./Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.asm")
-lines = asm.readlines()
-second_program = []
-
-pointer = 16
-st_var = {}
-st_dest = {}
-st_comp = {}
-st_jump = {}
 init_sts()
 
-counter = 0
-for line in lines:
-    fline = format_line(line)
+def first_pass(lines):
+    counter = 0
+    for line in lines:
+        fline = format_line(line)
 
-    if fline != "" and fline[0] == "(":
-        second_parethesis = fline.find(")")
-        manipulate_memorie(fline[1:second_parethesis], counter)
-        counter += 1
-    elif fline != "":
-        second_program.append(fline)
-        counter += 1
+        if fline != "" and fline[0] == "(":
+            second_parethesis = fline.find(")")
+            manipulate_memorie(fline[1:second_parethesis], 0, counter)
+            counter += 1
+        elif fline != "":
+            second_program.append(fline)
+            counter += 1
+
+def second_pass(program):
+    pointer = 16
+    for line in program:
+        new_line = ""
+        if line[0] == "@":
+            v = manipulate_memorie(line[1:], pointer)
+            if v[1] == 1:
+                pointer = v[0]
+                new_line = "@" + str(pointer - 1)
+            else:
+                new_line = "@" + str(v[0])
+        else:
+            new_line = line
+        to_assembly.append(new_line)
+
+
+first_pass(lines)
+second_pass(second_program)

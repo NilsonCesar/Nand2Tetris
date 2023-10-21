@@ -1,6 +1,7 @@
-filename = "asm"
+filename = "Pong"
+folder = "pong"
 
-asm = open(f"./Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.asm")
+asm = open(f"./Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{folder}/{filename}.asm")
 lines = asm.readlines()
 second_program = []
 to_assembly = []
@@ -81,9 +82,12 @@ def init_st_dest():
     st_dest["M"] = "001"
     st_dest["D"] = "010"
     st_dest["DM"] = "011"
+    st_dest["MD"] = "011"
     st_dest["A"] = "100"
     st_dest["AM"] = "101"
+    st_dest["MA"] = "101"
     st_dest["AD"] = "110"
+    st_dest["DA"] = "110"
     st_dest["ADM"] = "110"
 
 def init_st_comp():
@@ -148,7 +152,7 @@ def format_line(line):
 def manipulate_memorie(value, pointer, mem=-1):
     try:
         addr = int(value)
-        return addr
+        return [addr, 0]
     except:
         if var_exists(value):
             return [st_var[value], 0]
@@ -170,7 +174,6 @@ def first_pass(lines):
         if fline != "" and fline[0] == "(":
             second_parethesis = fline.find(")")
             manipulate_memorie(fline[1:second_parethesis], 0, counter)
-            counter += 1
         elif fline != "":
             second_program.append(fline)
             counter += 1
@@ -203,7 +206,7 @@ first_pass(lines)
 second_pass(second_program)
 assembly(to_assembly)
 
-with open(f"Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.hack", "w") as file:
+with open(f"Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{folder}/{filename}.hack", "w") as file:
     for line in machine_code:
         file.write(line)
         file.write("\n")

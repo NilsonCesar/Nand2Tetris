@@ -130,6 +130,24 @@ def format_line(line):
 
     return ans
 
+# Return the address memorie taken as input v, where v is the number/symbol in @v
+# If he should, the env will be added with a new variable v
+def manipulate_memorie(value, mem=-1):
+    try:
+        addr = int(value)
+        return addr
+    except:
+        if var_exists(value):
+            return st_var[value]
+        else:
+            if mem == -1:
+                st_var[value] = pointer
+                pointer += 1
+                return pointer - 1
+            else:
+                st_var[value] = mem
+                return pointer
+
 # Main part
 
 # with open(f"Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.hack", "w") as file:
@@ -139,6 +157,7 @@ filename = "asm"
 
 asm = open(f"./Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.asm")
 lines = asm.readlines()
+second_program = []
 
 pointer = 16
 st_var = {}
@@ -147,5 +166,14 @@ st_comp = {}
 st_jump = {}
 init_sts()
 
+counter = 0
 for line in lines:
-    format_line(line)
+    fline = format_line(line)
+
+    if fline != "" and fline[0] == "(":
+        second_parethesis = fline.find(")")
+        manipulate_memorie(fline[1:second_parethesis], counter)
+        counter += 1
+    elif fline != "":
+        second_program.append(fline)
+        counter += 1

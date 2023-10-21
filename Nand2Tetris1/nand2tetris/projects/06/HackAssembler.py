@@ -119,9 +119,22 @@ def init_st_jump():
 def var_exists(var):
     return not (st_var.get(var) == None)
 
+# Format line to strip white space and ignore comments
+def format_line(line):
+    ans = line
+    slash_idx = line.find("//")
+
+    if slash_idx != -1:
+        ans = line[:slash_idx]
+    ans = ans.strip()
+
+    return ans
+
 # Main part
 
 # with open(f"Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.hack", "w") as file:
+# file.write()
+# file.write("\n")
 filename = "asm"
 
 asm = open(f"./Nand2Tetris/Nand2Tetris1/nand2tetris/projects/06/{filename}.asm")
@@ -135,4 +148,4 @@ st_jump = {}
 init_sts()
 
 for line in lines:
-    C_Instruction(line)
+    format_line(line)

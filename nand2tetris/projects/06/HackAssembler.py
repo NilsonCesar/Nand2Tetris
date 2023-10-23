@@ -149,7 +149,7 @@ def format_line(line):
 
 # Return the address memorie taken as input v, where v is the number/symbol in @v
 # If he should, the env will be added with a new variable v
-def manipulate_memorie(value, pointer, mem=-1):
+def manipulate_memory(value, pointer, mem=-1):
     try:
         addr = int(value)
         return [addr, 0]
@@ -173,7 +173,7 @@ def first_pass(lines):
 
         if fline != "" and fline[0] == "(":
             second_parethesis = fline.find(")")
-            manipulate_memorie(fline[1:second_parethesis], 0, counter)
+            manipulate_memory(fline[1:second_parethesis], 0, counter)
         elif fline != "":
             second_program.append(fline)
             counter += 1
@@ -183,7 +183,7 @@ def second_pass(program):
     for line in program:
         new_line = ""
         if line[0] == "@":
-            v = manipulate_memorie(line[1:], pointer)
+            v = manipulate_memory(line[1:], pointer)
             if v[1] == 1:
                 pointer = v[0]
                 new_line = "@" + str(pointer - 1)

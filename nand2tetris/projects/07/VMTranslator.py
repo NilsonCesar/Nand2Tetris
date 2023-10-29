@@ -30,7 +30,7 @@ class CodeWriter():
         self.vm_operations = vm_operations
         self.name_file = name_file
     
-    def translate(self):
+    def translate_to_asm(self):
         self.asm_code = []
         for vm_operation in self.vm_operations:
             if vm_operation[0] == "add":
@@ -38,7 +38,7 @@ class CodeWriter():
             if vm_operation[0] == "sub":
                 self.asm_code += self.sub_asm_code()
             if vm_operation[0] == "neg":
-                self.asm_code += self.neg_asm.code()
+                self.asm_code += self.neg_asm_code()
             if vm_operation[0] == "eq":
                 self.asm_code += self.eq_asm_code(len(self.asm_code) + 1)
             if vm_operation[0] == "gt":
@@ -85,42 +85,43 @@ class CodeWriter():
                 self.asm_code += self.pop_pointer_asm_code("THIS")
             if vm_operation[0] == "pop" and vm_operation[1] == "pointer" and vm_operation[2] == "1":
                 self.asm_code += self.pop_pointer_asm_code("THAT")
+        return self.asm_code
 
     def find_addr(self, pointer, i, act_line):
-        return [f"@{pointer}", "D=A", "@addr", "M=D", f"@{i}", "D=A", "@i", "M=D", "D=M", f"@{20 + act_line}", "D;JEQ", "@addr", "M=M+1", "@i", "M=M-1", "D=M", f"@{20 + act_line}", "D;JEQ", f"@{11 + act_line}", "0;JMP"]
+        return [f"@{pointer}", "D=M", "@addr", "M=D", f"@{i}", "D=A", "@i", "M=D", "D=M", f"@{19 + act_line}", "D;JEQ", "@addr", "M=M+1", "@i", "M=M-1", "D=M", f"@{19 + act_line}", "D;JEQ", f"@{10 + act_line}", "0;JMP"]
 
     def push_in_stack(self):
         return ["@addr", "A=M", "D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
 
     def pop_in_stack(self):
-        return ["@SP", "M=M-1", "A=M", "D=M", "@addr", "A=M", "M=D"]
+        return ["@SP", "AM=M-1", "D=M", "@addr", "A=M", "M=D"]
 
     def add_asm_code(self):
-        return ["@SP", "M=M-1", "A=M", "D=M", "@SP", "M=M-1", "A=M", "M=M+D", "@SP", "M=M+1"]
+        return ["@SP", "AM=M-1", "D=M", "@SP", "M=M-1", "A=M", "M=M+D", "@SP", "M=M+1"]
     
     def sub_asm_code(self):
-        return ["@SP", "M=M-1", "A=M", "D=M", "@SP", "M=M-1", "A=M", "M=M-D", "@SP", "M=M+1"]
+        return ["@SP", "AM=M-1", "D=M", "@SP", "M=M-1", "A=M", "M=M-D", "@SP", "M=M+1"]
 
     def neg_asm_code(self):
-        return ["@SP", "M=M-1", "A=M", "M=-M", "@SP", "M=M+1"]
+        return ["@SP", "AM=M-1", "M=-M", "@SP", "M=M+1"]
 
     def eq_asm_code(self, act_line):
-        return ["@SP", "M=M-1", "A=M", "D=M", "@SP", "M=M-1", "A=M", "D=M-D", f"@{13 + act_line}", "D;JEQ", "D=0", f"@{14 + act_line}", "0;JMP", "D=1", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
+        return ["@SP", "AM=M-1", "D=M", "@SP", "M=M-1", "A=M", "D=M-D", f"@{11 + act_line}", "D;JEQ", "D=0", f"@{12 + act_line}", "0;JMP", "D=-1", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
 
     def gt_asm_code(self, act_line):
-        return ["@SP", "M=M-1", "A=M", "D=M", "@SP", "M=M-1", "A=M", "D=M-D", f"@{13 + act_line}", "D;JGT", "D=0", f"@{14 + act_line}", "0;JMP", "D=1", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
+        return ["@SP", "AM=M-1", "D=M", "@SP", "M=M-1", "A=M", "D=M-D" , f"@{11 + act_line}", "D;JLE", "D=-1", f"@{12 + act_line}", "0;JMP", "D=0", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
     
     def lt_asm_code(self, act_line):
-        return ["@SP", "M=M-1", "A=M", "D=M", "@SP", "M=M-1", "A=M", "D=M-D", f"@{13 + act_line}", "D;JLT", "D=0", f"@{14 + act_line}", "0;JMP", "D=1", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
+        return ["@SP", "AM=M-1", "D=M", "@SP", "M=M-1", "A=M", "D=M-D", f"@{11 + act_line}", "D;JGE", "D=-1", f"@{12 + act_line}", "0;JMP", "D=0", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
 
     def and_asm_code(self):
-        return ["@SP", "M=M-1", "A=M", "D=M", "@SP", "M=M-1", "A=M", "M=M&D", "@SP", "M=M+1"]
+        return ["@SP", "AM=M-1", "D=M", "@SP", "M=M-1", "A=M", "M=M&D", "@SP", "M=M+1"]
 
     def or_asm_code(self):
-        return ["@SP", "M=M-1", "A=M", "D=M", "@SP", "M=M-1", "A=M", "M=M|D", "@SP", "M=M+1"]
+        return ["@SP", "AM=M-1", "D=M", "@SP", "M=M-1", "A=M", "M=M|D", "@SP", "M=M+1"]
 
-    def neg_asm_code(self):
-        return ["@SP", "M=M-1", "A=M", "M=!M", "@SP", "M=M+1"]
+    def not_asm_code(self):
+        return ["@SP", "AM=M-1", "M=!M", "@SP", "M=M+1"]
 
     def push_const_asm_code(self, i):
         return [f"@{i}", "D=A", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
@@ -135,19 +136,19 @@ class CodeWriter():
         return [f"@{5 + i}", "D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
 
     def push_pointer(self, pointer):
-        return [f"@{pointer}", "D=A", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
+        return [f"@{pointer}", "D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
     
     def pop_latt_asm_code(self, pointer, i, act_line):
         return self.find_addr(pointer, i, act_line) + self.pop_in_stack()
 
     def pop_static_asm_code(self, i):
-        return ["@SP", "M=M-1", "A=M", "D=M", f"@{self.name_file}.{i}", "M=D"]
+        return ["@SP", "AM=M-1", "D=M", f"@{self.name_file}.{i}", "M=D"]
     
     def pop_temp_asm_code(self, i):
-        return ["@SP", "M=M-1", "A=M", "D=M", f"@{5 + i}", "M=D"]
+        return ["@SP", "AM=M-1", "D=M", f"@{5 + i}", "M=D"]
     
     def pop_pointer_asm_code(self, pointer):
-        return ["@SP", "M=M-1", "A=M", "D=M", f"@{pointer}", "M=D"]
+        return ["@SP", "AM=M-1", "D=M", f"@{pointer}", "M=D"]
 
 def find_name_file(dir):
     init = 0
@@ -166,4 +167,11 @@ if __name__ == "__main__":
     name_file = find_name_file(file_path)
     program = open(file_path).readlines()
     parser = Parser(program)
-    print()
+    operations = parser.take_operations()
+    code_writer = CodeWriter(operations, name_file)
+    asm_code = code_writer.translate_to_asm()
+    dest = file_path[:-2] + "asm"
+    with open(dest, 'w') as file:
+        for line in asm_code:
+            file.write(line)
+            file.write('\n')

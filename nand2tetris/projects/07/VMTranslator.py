@@ -26,8 +26,9 @@ class Parser():
         return operations
 
 class CodeWriter():
-    def __init__(self, vm_operations):
+    def __init__(self, vm_operations, name_file):
         self.vm_operations = vm_operations
+        self.name_file = name_file
     
     def translate(self):
         self.asm_code = []
@@ -60,6 +61,8 @@ class CodeWriter():
                 self.asm_code += self.push_latt_asm_code("THIS", int(vm_operation[2]), len(self.asm_code) + 1)
             if vm_operation[0] == "push" and vm_operation[1] == "that":
                 self.asm_code += self.push_latt_asm_code("THAT", int(vm_operation[2]), len(self.asm_code) + 1)
+            if vm_operation[0] == "push" and vm_operation[1] == "static":
+                self.asm_code += self.push_static_asm_code(int(vm_operation[2]))
             if vm_operation[0] == "pop" and vm_operation[1] == "local":
                 self.asm_code += self.pop_latt_asm_code("LCL", int(vm_operation[2]), len(self.asm_code) + 1)
             if vm_operation[0] == "pop" and vm_operation[1] == "argument":
@@ -68,6 +71,8 @@ class CodeWriter():
                 self.asm_code += self.pop_latt_asm_code("THIS", int(vm_operation[2]), len(self.asm_code) + 1)
             if vm_operation[0] == "pop" and vm_operation[1] == "that":
                 self.asm_code += self.pop_latt_asm_code("THAT", int(vm_operation[2]), len(self.asm_code) + 1)
+            if vm_operation[0] == "pop" and vm_operation[1] == "static":
+                self.asm_code += self.pop_static_asm_code(int(vm_operation[2]))
 
     def find_addr(self, pointer, i, act_line):
         return [f"@{pointer}", "D=A", "@addr", "M=D", f"@{i}", "D=A", "@i", "M=D", "D=M", f"@{20 + act_line}", "D;JEQ", "@addr", "M=M+1", "@i", "M=M-1", "D=M", f"@{20 + act_line}", "D;JEQ", f"@{11 + act_line}", "0;JMP"]
@@ -114,8 +119,27 @@ class CodeWriter():
     def pop_latt_asm_code(self, pointer, i, act_line):
         return self.find_addr(pointer, i, act_line) + self.pop_in_stack()
 
+    def push_static_asm_code(self, i):
+        return [f"@{self.name_file}.{i}", "D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
+
+    def pop_static_asm_code(self, i):
+        return ["@SP", "M=M-1", "A=M", "D=M", f"@{self.name_file}.{i}", "M=D"]
+
+def find_name_file(dir):
+    init = 0
+    final = len(dir)
+
+    for i in range(len(dir)):
+        if dir[i] == '/':
+            init = i + 1
+        if dir[i] == '.':
+            final = i
+
+    return dir[init:final]
+
 if __name__ == "__main__":
     file_path = sys.argv[1]
+    name_file = find_name_file(file_path)
     program = open(file_path).readlines()
     parser = Parser(program)
-    print([1, 2] + [3, 4])
+    print()

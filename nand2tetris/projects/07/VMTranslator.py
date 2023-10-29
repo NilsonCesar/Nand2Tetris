@@ -63,6 +63,12 @@ class CodeWriter():
                 self.asm_code += self.push_latt_asm_code("THAT", int(vm_operation[2]), len(self.asm_code) + 1)
             if vm_operation[0] == "push" and vm_operation[1] == "static":
                 self.asm_code += self.push_static_asm_code(int(vm_operation[2]))
+            if vm_operation[0] == "push" and vm_operation[1] == "temp":
+                self.asm_code += self.push_temp_asm_code(int(vm_operation[2]))
+            if vm_operation[0] == "push" and vm_operation[1] == "pointer" and vm_operation[2] == "0":
+                self.asm_code += self.push_pointer("THIS")
+            if vm_operation[0] == "push" and vm_operation[1] == "pointer" and vm_operation[2] == "1":
+                self.asm_code += self.push_pointer("THAT")
             if vm_operation[0] == "pop" and vm_operation[1] == "local":
                 self.asm_code += self.pop_latt_asm_code("LCL", int(vm_operation[2]), len(self.asm_code) + 1)
             if vm_operation[0] == "pop" and vm_operation[1] == "argument":
@@ -73,6 +79,12 @@ class CodeWriter():
                 self.asm_code += self.pop_latt_asm_code("THAT", int(vm_operation[2]), len(self.asm_code) + 1)
             if vm_operation[0] == "pop" and vm_operation[1] == "static":
                 self.asm_code += self.pop_static_asm_code(int(vm_operation[2]))
+            if vm_operation[0] == "pop" and vm_operation[1] == "temp":
+                self.asm_code += self.pop_temp_asm_code(int(vm_operation[2]))
+            if vm_operation[0] == "pop" and vm_operation[1] == "pointer" and vm_operation[2] == "0":
+                self.asm_code += self.pop_pointer_asm_code("THIS")
+            if vm_operation[0] == "pop" and vm_operation[1] == "pointer" and vm_operation[2] == "1":
+                self.asm_code += self.pop_pointer_asm_code("THAT")
 
     def find_addr(self, pointer, i, act_line):
         return [f"@{pointer}", "D=A", "@addr", "M=D", f"@{i}", "D=A", "@i", "M=D", "D=M", f"@{20 + act_line}", "D;JEQ", "@addr", "M=M+1", "@i", "M=M-1", "D=M", f"@{20 + act_line}", "D;JEQ", f"@{11 + act_line}", "0;JMP"]
@@ -116,14 +128,26 @@ class CodeWriter():
     def push_latt_asm_code(self, pointer, i, act_line):
         return self.find_addr(pointer, i, act_line) + self.push_in_stack()
     
+    def push_static_asm_code(self, i):
+        return [f"@{self.name_file}.{i}", "D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
+    
+    def push_temp_asm_code(self, i):
+        return [f"@{5 + i}", "D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
+
+    def push_pointer(self, pointer):
+        return [f"@{pointer}", "D=A", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
+    
     def pop_latt_asm_code(self, pointer, i, act_line):
         return self.find_addr(pointer, i, act_line) + self.pop_in_stack()
 
-    def push_static_asm_code(self, i):
-        return [f"@{self.name_file}.{i}", "D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
-
     def pop_static_asm_code(self, i):
         return ["@SP", "M=M-1", "A=M", "D=M", f"@{self.name_file}.{i}", "M=D"]
+    
+    def pop_temp_asm_code(self, i):
+        return ["@SP", "M=M-1", "A=M", "D=M", f"@{5 + i}", "M=D"]
+    
+    def pop_pointer_asm_code(self, pointer):
+        return ["@SP", "M=M-1", "A=M", "D=M", f"@{pointer}", "M=D"]
 
 def find_name_file(dir):
     init = 0

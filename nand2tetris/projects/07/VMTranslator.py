@@ -62,6 +62,12 @@ class CodeWriter():
                 self.asm_code += self.push_latt_asm_code("THAT", int(vm_operation[2]), len(self.asm_code) + 1)
             if vm_operation[0] == "pop" and vm_operation[1] == "local":
                 self.asm_code += self.pop_latt_asm_code("LCL", int(vm_operation[2]), len(self.asm_code) + 1)
+            if vm_operation[0] == "pop" and vm_operation[1] == "argument":
+                self.asm_code += self.pop_latt_asm_code("ARG", int(vm_operation[2]), len(self.asm_code) + 1)
+            if vm_operation[0] == "pop" and vm_operation[1] == "this":
+                self.asm_code += self.pop_latt_asm_code("THIS", int(vm_operation[2]), len(self.asm_code) + 1)
+            if vm_operation[0] == "pop" and vm_operation[1] == "that":
+                self.asm_code += self.pop_latt_asm_code("THAT", int(vm_operation[2]), len(self.asm_code) + 1)
 
     def find_addr(self, pointer, i, act_line):
         return [f"@{pointer}", "D=A", "@addr", "M=D", f"@{i}", "D=A", "@i", "M=D", "D=M", f"@{20 + act_line}", "D;JEQ", "@addr", "M=M+1", "@i", "M=M-1", "D=M", f"@{20 + act_line}", "D;JEQ", f"@{11 + act_line}", "0;JMP"]

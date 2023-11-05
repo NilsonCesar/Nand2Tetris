@@ -1,4 +1,4 @@
-import sys
+import sys, os
 
 class Parser():
     def __init__(self, program):
@@ -26,17 +26,19 @@ class Parser():
         return operations
 
 class CodeWriter():
-    def __init__(self, vm_operations, name_file):
+    def __init__(self, vm_operations, name_file, asm_code, op):
         self.vm_operations = vm_operations
         self.name_file = name_file
-        self.asm_code = []
+        self.asm_code = asm_code
+        self.op = op
     
     def translate_to_asm(self):
-        count = 0
-        op = 0
+        count = len(self.asm_code) - self.op
+        actual_function = ""
+        current_i = 1
         for vm_operation in self.vm_operations:
             self.asm_code += ["// " + " ".join(vm_operation)]
-            op += 1
+            self.op += 1
             if vm_operation[0] == "add":
                 self.asm_code += self.add_asm_code()
             if vm_operation[0] == "sub":
@@ -90,14 +92,34 @@ class CodeWriter():
             if vm_operation[0] == "pop" and vm_operation[1] == "pointer" and vm_operation[2] == "1":
                 self.asm_code += self.pop_pointer_asm_code("THAT")
             if vm_operation[0] == "label":
-                self.asm_code += self.label_asm_code(vm_operation[1])
-                op += 1
+                if actual_function == "":
+                    self.asm_code += self.label_asm_code(vm_operation[1])
+                else:
+                    self.asm_code += self.label_asm_code(actual_function + "$" + vm_operation[1])
+                self.op += 1
             if vm_operation[0] == "goto":
-                self.asm_code += self.goto_asm_code(vm_operation[1])
+                if actual_function == "":
+                    self.asm_code += self.goto_asm_code(vm_operation[1])
+                else:
+                    self.asm_code += self.goto_asm_code(actual_function + "$" + vm_operation[1])
             if vm_operation[0] == "if-goto":
-                self.asm_code += self.if_goto_asm_code(vm_operation[1])
-            count = len(self.asm_code) - op
-        return self.asm_code
+                if actual_function == "":
+                    self.asm_code += self.if_goto_asm_code(vm_operation[1])
+                else:
+                    self.asm_code += self.if_goto_asm_code(actual_function + "$" + vm_operation[1])
+            if vm_operation[0] == "call":
+                self.asm_code += self.call_asm_code(vm_operation[1], int(vm_operation[2]), actual_function + "$ret." + str(current_i), count + 1)
+                current_i += 1
+                self.op += 1
+            if vm_operation[0] == "function":
+                self.asm_code += self.function_asm_code(vm_operation[1], int(vm_operation[2]), count)
+                self.op += 1 
+                actual_function = vm_operation[1]
+                current_i = 1
+            if vm_operation[0] == "return":
+                self.asm_code += self.return_asm_code()
+            count = len(self.asm_code) - self.op
+        return [self.asm_code, self.op]
 
     def find_addr(self, pointer, i, act_line):
         return [f"@{pointer}", "D=M", "@addr", "M=D", f"@{i}", "D=A", "@i", "M=D", "D=M", f"@{19 + act_line}", "D;JEQ", "@addr", "M=M+1", "@i", "M=M-1", "D=M", f"@{19 + act_line}", "D;JEQ", f"@{10 + act_line}", "0;JMP"]
@@ -121,10 +143,10 @@ class CodeWriter():
         return ["@SP", "AM=M-1", "D=M", "@SP", "AM=M-1", "D=M-D", f"@{11 + act_line}", "D;JEQ", "D=0", f"@{12 + act_line}", "0;JMP", "D=-1", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
 
     def gt_asm_code(self, act_line):
-        return ["@SP", "AM=M-1", "D=M", "@SP", "AM=M-1", "D=M-D" , f"@{11 + act_line}", "D;JLE", "D=-1", f"@{12 + act_line}", "0;JMP", "D=0", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
+        return ["@SP", "AM=M-1", "D=M", "@SP", "AM=M-1", "D=M-D" , f"@{10 + act_line}", "D;JGT", "D=0", f"@{11 + act_line}", "0;JMP", "D=-1", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
     
     def lt_asm_code(self, act_line):
-        return ["@SP", "AM=M-1", "D=M", "@SP", "AM=M-1", "D=M-D", f"@{11 + act_line}", "D;JGE", "D=-1", f"@{12 + act_line}", "0;JMP", "D=0", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
+        return ["@SP", "AM=M-1", "D=M", "@SP", "AM=M-1", "D=M-D", f"@{10 + act_line}", "D;JLT", "D=0", f"@{11 + act_line}", "0;JMP", "D=-1", "@SP", "A=M", "M=D", "@SP", "M=M+1"]
 
     def and_asm_code(self):
         return ["@SP", "AM=M-1", "D=M", "@SP", "AM=M-1", "M=M&D", "@SP", "M=M+1"]
@@ -171,6 +193,24 @@ class CodeWriter():
     def if_goto_asm_code(self, label):
         return ["@SP", "AM=M-1", "D=M", f"@{label}", "D;JNE"]
 
+    def call_asm_code(self, function_name, n_args, retAddrLabel, act_line):
+        return [f"@{48 + act_line}", "D=A", f"@{retAddrLabel}", "M=D", "@SP", "A=M", "M=D", "@SP",
+                "M=M+1", "@LCL", "D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1",
+                "@ARG", "D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1", "@THIS", "D=M",
+                "@SP", "A=M", "M=D", "@SP", "M=M+1", "@THAT", "D=M", "@SP", "A=M",
+                "M=D", "@SP", "M=M+1", f"@{5 + n_args}", "D=A", "@SP", "D=M-D", "@ARG",
+                "M=D", "@SP", "D=M", "@LCL", "M=D"] + self.goto_asm_code(function_name) + [f"({retAddrLabel})"]
+
+    def function_asm_code(self, function_name, n_vars, act_line):
+        return self.label_asm_code(function_name) + [f"@{n_vars}", "D=A", "@i", "M=D", f"@{17 + act_line}", "D;JEQ"] + self.push_const_asm_code(0) + ["@i", "MD=M-1", f"@{4 + act_line}", "0;JMP"]
+
+    def return_asm_code(self):
+        return ["@LCL", "D=M", "@5", "D=D-A", "A=D", "D=M", "@retAddr", "M=D", 
+                "@SP", "AM=M-1", "D=M", "@ARG", "A=M", "M=D", "@ARG",
+                "D=M+1", "@SP", "M=D", "@LCL", "AM=M-1", "D=M",
+                "@THAT", "M=D", "@LCL", "AM=M-1", "D=M", "@THIS", "M=D", "@LCL", "AM=M-1", "D=M",
+                "@ARG", "M=D", "@LCL", "AM=M-1", "D=M", "@LCL", "M=D", "@retAddr", "A=M", "0;JMP"]
+
 def find_name_file(dir):
     init = 0
     final = len(dir)
@@ -183,15 +223,65 @@ def find_name_file(dir):
 
     return dir[init:final]
 
-if __name__ == "__main__":
-    file_path = sys.argv[1]
+def find_folder_name(dir):
+    last_slash = -1
+    third_to_last_slash = -1
+    if dir[len(dir) - 1] == "/":
+        last_slash = len(dir) - 1
+    
+    if last_slash == -1:
+        for i in range(len(dir)):
+            if dir[i] == "/":
+                last_slash = i
+        return dir[last_slash + 1:]
+    else:
+        for i in range(len(dir) - 1):
+            if dir[i] == "/":
+                third_to_last_slash = i
+        return dir[third_to_last_slash + 1: last_slash]
+
+def VM_file_to_asm(file_path, asm_code, op):
     name_file = find_name_file(file_path)
     program = open(file_path).readlines()
     parser = Parser(program)
     operations = parser.take_operations()
-    code_writer = CodeWriter(operations, name_file)
-    asm_code = code_writer.translate_to_asm()
-    dest = file_path[:-2] + "asm"
+    code_writer = CodeWriter(operations, name_file, asm_code, op)
+    ans = code_writer.translate_to_asm()
+    return ans
+
+if __name__ == "__main__":
+    path = sys.argv[1]
+    asm_code = []
+    if len(path) >= 2 and path[-2:] == "vm":
+        ans = VM_file_to_asm(path, [], 0)
+        asm_code = ans[0]
+        dest = path[:-2] + "asm"
+    else:
+        has_sys = False
+        entries = os.scandir(path)
+        op = 0
+        folder_name = find_folder_name(path)
+        dest = path + folder_name + ".asm"
+        for entry in entries:
+            file = entry.name
+            if file == "Sys.vm":
+                has_sys = True
+        entries = os.scandir(path)
+        if has_sys:
+            asm_code = ["@Sys.init", "0;JMP"]
+            for entry in entries:
+                file = entry.name
+                if file[-2:] == "vm":
+                    ans = VM_file_to_asm(path + file, asm_code, op)
+                    asm_code = ans[0]
+                    op = ans[1]
+        else:
+            asm_code = []
+            for entry in entries:
+                file = entry.name
+                if file[-2:] == "vm":
+                    asm_code = VM_file_to_asm(path + file, asm_code, op)
+
     with open(dest, 'w') as file:
         for line in asm_code:
             file.write(line + '\n')

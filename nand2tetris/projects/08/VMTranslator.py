@@ -286,7 +286,8 @@ if __name__ == "__main__":
             for entry in entries:
                 file = entry.name
                 if file[-2:] == "vm":
-                    asm_code = VM_file_to_asm(path + file, asm_code, op)
+                    ans = VM_file_to_asm(path + file, asm_code, op)
+                    asm_code = ans[0]
 
     with open(dest, 'w') as file:
         for line in asm_code:

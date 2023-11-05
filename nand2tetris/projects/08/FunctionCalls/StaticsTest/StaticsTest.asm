@@ -1,12 +1,64 @@
+@256
+D=A
+@SP
+M=D
+@52
+D=A
+@Sys.init$ret.1
+M=D
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@LCL
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@ARG
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THIS
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THAT
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@5
+D=A
+@SP
+D=M-D
+@ARG
+M=D
+@SP
+D=M
+@LCL
+M=D
 @Sys.init
 0;JMP
+@Sys.init$ret.1
 // function Class1.set 0
 (Class1.set)
 @0
 D=A
 @i
 M=D
-@19
+@71
 D;JEQ
 @0
 D=A
@@ -17,7 +69,7 @@ M=D
 M=M+1
 @i
 MD=M-1
-@6
+@58
 0;JMP
 // push argument 0
 @ARG
@@ -29,16 +81,16 @@ D=A
 @i
 M=D
 D=M
-@39
+@91
 D;JEQ
 @addr
 M=M+1
 @i
 M=M-1
 D=M
-@39
+@91
 D;JEQ
-@30
+@82
 0;JMP
 @addr
 A=M
@@ -64,16 +116,16 @@ D=A
 @i
 M=D
 D=M
-@72
+@124
 D;JEQ
 @addr
 M=M+1
 @i
 M=M-1
 D=M
-@72
+@124
 D;JEQ
-@63
+@115
 0;JMP
 @addr
 A=M
@@ -145,7 +197,7 @@ A=M
 D=A
 @i
 M=D
-@150
+@202
 D;JEQ
 @0
 D=A
@@ -156,7 +208,7 @@ M=D
 M=M+1
 @i
 MD=M-1
-@137
+@189
 0;JMP
 // push static 0
 @Class1.0
@@ -231,7 +283,7 @@ A=M
 D=A
 @i
 M=D
-@230
+@282
 D;JEQ
 @0
 D=A
@@ -242,7 +294,7 @@ M=D
 M=M+1
 @i
 MD=M-1
-@217
+@269
 0;JMP
 // push argument 0
 @ARG
@@ -254,16 +306,16 @@ D=A
 @i
 M=D
 D=M
-@250
+@302
 D;JEQ
 @addr
 M=M+1
 @i
 M=M-1
 D=M
-@250
+@302
 D;JEQ
-@241
+@293
 0;JMP
 @addr
 A=M
@@ -289,16 +341,16 @@ D=A
 @i
 M=D
 D=M
-@283
+@335
 D;JEQ
 @addr
 M=M+1
 @i
 M=M-1
 D=M
-@283
+@335
 D;JEQ
-@274
+@326
 0;JMP
 @addr
 A=M
@@ -370,7 +422,7 @@ A=M
 D=A
 @i
 M=D
-@361
+@413
 D;JEQ
 @0
 D=A
@@ -381,7 +433,7 @@ M=D
 M=M+1
 @i
 MD=M-1
-@348
+@400
 0;JMP
 // push static 0
 @Class2.0
@@ -456,7 +508,7 @@ A=M
 D=A
 @i
 M=D
-@441
+@493
 D;JEQ
 @0
 D=A
@@ -467,7 +519,7 @@ M=D
 M=M+1
 @i
 MD=M-1
-@428
+@480
 0;JMP
 // push constant 6
 @6
@@ -486,7 +538,7 @@ M=D
 @SP
 M=M+1
 // call Class1.set 2
-@504
+@556
 D=A
 @Sys.init$ret.1
 M=D
@@ -559,7 +611,7 @@ M=D
 @SP
 M=M+1
 // call Class2.set 2
-@572
+@624
 D=A
 @Sys.init$ret.2
 M=D
@@ -616,7 +668,7 @@ D=M
 @5
 M=D
 // call Class1.get 0
-@626
+@678
 D=A
 @Sys.init$ret.3
 M=D
@@ -667,7 +719,7 @@ M=D
 0;JMP
 (Sys.init$ret.3)
 // call Class2.get 0
-@675
+@727
 D=A
 @Sys.init$ret.4
 M=D

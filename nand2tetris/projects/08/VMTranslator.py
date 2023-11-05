@@ -270,7 +270,11 @@ if __name__ == "__main__":
                 has_sys = True
         entries = os.scandir(path)
         if has_sys:
-            asm_code = ["@Sys.init", "0;JMP"]
+            asm_code = ["@256", "D=A", "@SP", "M=D", "@52", "D=A", "@Sys.init$ret.1", "M=D", "@SP", "A=M", "M=D", "@SP", "M=M+1", "@LCL", "D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1",
+                "@ARG", "D=M", "@SP", "A=M", "M=D", "@SP", "M=M+1", "@THIS", "D=M",
+                "@SP", "A=M", "M=D", "@SP", "M=M+1", "@THAT", "D=M", "@SP", "A=M",
+                "M=D", "@SP", "M=M+1", "@5", "D=A", "@SP", "D=M-D", "@ARG",
+                "M=D", "@SP", "D=M", "@LCL", "M=D", "@Sys.init", "0;JMP", "@Sys.init$ret.1"]
             for entry in entries:
                 file = entry.name
                 if file[-2:] == "vm":

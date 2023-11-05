@@ -257,6 +257,8 @@ if __name__ == "__main__":
         asm_code = ans[0]
         dest = path[:-2] + "asm"
     else:
+        if path[len(path) - 1] != "/":
+            path += "/"
         has_sys = False
         entries = os.scandir(path)
         op = 0

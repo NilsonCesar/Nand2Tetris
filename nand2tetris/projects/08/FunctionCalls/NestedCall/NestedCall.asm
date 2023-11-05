@@ -1,7 +1,7 @@
-@Sys.Sys.init
+@Sys.init
 0;JMP
 // function Sys.init 0
-(Sys.Sys.init)
+(Sys.init)
 @0
 D=A
 @i
@@ -50,7 +50,7 @@ M=D
 // call Sys.main 0
 @92
 D=A
-@Sys.Sys.init$ret.1
+@Sys.init$ret.1
 M=D
 @SP
 A=M
@@ -95,9 +95,9 @@ M=D
 D=M
 @LCL
 M=D
-@Sys.Sys.main
+@Sys.main
 0;JMP
-(Sys.Sys.init$ret.1)
+(Sys.init$ret.1)
 // pop temp 1
 @SP
 AM=M-1
@@ -105,12 +105,12 @@ D=M
 @6
 M=D
 // label LOOP
-(Sys.Sys.init$LOOP)
+(Sys.init$LOOP)
 // goto LOOP
-@Sys.Sys.init$LOOP
+@Sys.init$LOOP
 0;JMP
 // function Sys.main 5
-(Sys.Sys.main)
+(Sys.main)
 @5
 D=A
 @i
@@ -272,7 +272,7 @@ M=M+1
 // call Sys.add12 1
 @295
 D=A
-@Sys.Sys.main$ret.1
+@Sys.main$ret.1
 M=D
 @SP
 A=M
@@ -317,9 +317,9 @@ M=D
 D=M
 @LCL
 M=D
-@Sys.Sys.add12
+@Sys.add12
 0;JMP
-(Sys.Sys.main$ret.1)
+(Sys.main$ret.1)
 // pop temp 0
 @SP
 AM=M-1
@@ -550,7 +550,7 @@ M=D
 A=M
 0;JMP
 // function Sys.add12 0
-(Sys.Sys.add12)
+(Sys.add12)
 @0
 D=A
 @i

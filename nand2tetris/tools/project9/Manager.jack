@@ -9,7 +9,7 @@ class Manager {
         return this;
     }
 
-    function void register() {
+    method void register() {
         var char option;
         let option = 89;
 

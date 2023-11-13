@@ -1,4 +1,5 @@
 class Visualization {
+
     function void drawBear(int location) {
         var int memAddress;
         let memAddress = 16384+location;

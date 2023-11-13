@@ -13,6 +13,8 @@ pop this 2
 push pointer 0
 return
 function Manager.register 1
+push argument 0
+pop pointer 0
 push constant 89
 pop local 0
 label WHILE_EXP0

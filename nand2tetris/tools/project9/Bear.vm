@@ -18,13 +18,13 @@ pop temp 0
 push local 0
 push constant 64
 add
-push constant 24588
+push constant 12300
 call Memory.poke 2
 pop temp 0
 push local 0
 push constant 96
 add
-push constant 24562
+push constant 20466
 call Memory.poke 2
 pop temp 0
 push local 0

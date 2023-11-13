@@ -1,6 +1,8 @@
 function Main.main 0
 push constant 0
-call Bear.draw 1
+call Visualization.drawBear 1
+pop temp 0
+call Visualization.printWelcomeMessage 0
 pop temp 0
 push constant 0
 return

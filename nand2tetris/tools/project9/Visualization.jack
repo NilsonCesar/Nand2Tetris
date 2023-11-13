@@ -1,11 +1,11 @@
-class Bear {
-    function void draw(int location) {
-        var in memAddress;
+class Visualization {
+    function void drawBear(int location) {
+        var int memAddress;
         let memAddress = 16384+location;
         do Memory.poke(memAddress+0, 0);
         do Memory.poke(memAddress+32, 0);
-        do Memory.poke(memAddress+64, 24588);
-        do Memory.poke(memAddress+96, 24562);
+        do Memory.poke(memAddress+64, 12300);
+        do Memory.poke(memAddress+96, 20466);
         do Memory.poke(memAddress+128, 16386);
         do Memory.poke(memAddress+160, 8196);
         do Memory.poke(memAddress+192, 9828);
@@ -18,6 +18,16 @@ class Bear {
         do Memory.poke(memAddress+416, 4080);
         do Memory.poke(memAddress+448, 0);
         do Memory.poke(memAddress+480, 0);
+        return;
+    }
+
+    function void printWelcomeMessage() {
+        do Output.println();
+        do Output.println();
+        do Output.printString("Welcome to The Bear Ingredient Manager (TBIM)!");
+        do Output.println();
+        do Output.printString("Here, you can add your ingredients and the TBIM will compute to you how many of each one of it you will need buy!");
+        do Output.println();
         return;
     }
 }

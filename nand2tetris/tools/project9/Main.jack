@@ -1,6 +1,7 @@
 class Main {
     function void main() {
-        do Bear.draw(0);
+        do Visualization.drawBear(0);
+        do Visualization.printWelcomeMessage();
         return;
     }
 }

@@ -2,7 +2,7 @@ class Main {
     function void main() {
         var Manager manager;
         let manager = Manager.new();
-
+        
         do Visualization.drawBear(0);
         do Visualization.printWelcomeMessage();
         do manager.register();

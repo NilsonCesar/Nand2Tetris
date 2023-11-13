@@ -1,15 +1,16 @@
 class Manager {
     field Array ingredients, amountOfEachIngredient;
-    field int amountOfIngredients;
+    field int lastIngredientIndex;
 
     constructor Manager new() {
-        let ingredients = Array.new(1);
-        let amountOfEachIngredient = Array.new(1);
-        let amountOfIngredients = 0;
+        let ingredients = Array.new(100);
+        let amountOfEachIngredient = Array.new(100);
+        let lastIngredientIndex = -1;
         return this;
     }
 
     method void register() {
+        var int numIngredients;
         var char option;
         let option = 89;
 
@@ -19,12 +20,78 @@ class Manager {
             do Output.println();
 
             if(option = 89) {
-                do Output.printString("You wanna enter a recipe!");
+                let numIngredients = Keyboard.readInt("Enter how many ingredients the recipe has: ");
+                do logIngredients(numIngredients);
             }
             if(option = 78) {
                 do Output.printString("Exiting the registering...");
                 do Output.println();
             }
+        }
+
+        return;
+    }
+
+    method void logIngredients(int numIngredients) {
+        var String ingredient;
+        var int ingredientIdx, ingredientAmount;
+
+        while(numIngredients > 0) {
+            let ingredient = Keyboard.readLine("Please, enter a ingredient: ");
+            let ingredientIdx = findIngredient(ingredient);
+            let ingredientAmount = Keyboard.readInt("Now, enter how many of this ingredient the recipe needs: ");
+            do updateIngredientsList(ingredient, ingredientIdx, ingredientAmount);
+            let numIngredients = numIngredients - 1;
+        }
+
+        return;
+    }
+
+    method int findIngredient(String ingredient) {
+        var int actIdx;
+        if(lastIngredientIndex = -1) {
+            let lastIngredientIndex = lastIngredientIndex + 1;
+            return lastIngredientIndex;
+        }
+
+        let actIdx = 0;
+        while(~(actIdx > lastIngredientIndex)) {
+            if(compareString(ingredients[actIdx], ingredient)) {
+                return actIdx;
+            }
+            let actIdx = actIdx + 1;
+        }
+
+        return actIdx;
+    }
+
+    method int compareString(String a, String b) {
+        var int actIdx;
+
+        if(~(a.length() = b.length())) {
+            return 0;
+        }
+        
+        let actIdx = a.length() - 1;
+        while(actIdx > 0) {
+            if(~(a.charAt(actIdx) = b.charAt(actIdx))) {
+                return 0;
+            }
+            let actIdx = actIdx - 1;
+        }
+
+        return 1;
+    }
+
+    method void updateIngredientsList(String ingredient, int ingredientIdx, int ingredientAmount) {
+        if(~(ingredientIdx > lastIngredientIndex)) {
+            let amountOfEachIngredient[ingredientIdx] = amountOfEachIngredient[ingredientIdx] + ingredientAmount;
+            let ingredients[ingredientIdx] = ingredient;
+        }
+        if(ingredientIdx > lastIngredientIndex) {
+            let amountOfEachIngredient[ingredientIdx] = ingredientAmount;
+            let ingredients[ingredientIdx] = ingredient;
+            let lastIngredientIndex = lastIngredientIndex + 1;
         }
 
         return;

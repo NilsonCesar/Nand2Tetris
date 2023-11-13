@@ -1,0 +1,103 @@
+function Bear.draw 1
+push constant 16384
+push argument 0
+add
+pop local 0
+push local 0
+push constant 0
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 32
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 64
+add
+push constant 24588
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 96
+add
+push constant 24562
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 128
+add
+push constant 16386
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 160
+add
+push constant 8196
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 192
+add
+push constant 9828
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 224
+add
+push constant 9828
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 256
+add
+push constant 8196
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 288
+add
+push constant 8580
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 320
+add
+push constant 8580
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 352
+add
+push constant 8196
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 384
+add
+push constant 7224
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 416
+add
+push constant 4080
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 448
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 480
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push constant 0
+return

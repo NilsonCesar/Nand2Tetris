@@ -1,0 +1,6 @@
+class Main {
+    function void main() {
+        do Bear.draw(0);
+        return;
+    }
+}

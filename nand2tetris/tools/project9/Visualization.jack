@@ -24,7 +24,7 @@ class Visualization {
     function void printWelcomeMessage() {
         do Output.println();
         do Output.println();
-        do Output.printString("Welcome to The Bear Ingredient Manager (TBIM)!");
+        do Output.printString("Welcome to The Bear Ingredients Manager (TBIM)!");
         do Output.println();
         do Output.printString("Here, you can add your ingredients and the TBIM will compute to you how many of each one of it you will need buy!");
         do Output.println();

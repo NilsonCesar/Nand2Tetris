@@ -4,5 +4,9 @@ call Visualization.drawBear 1
 pop temp 0
 call Visualization.printWelcomeMessage 0
 pop temp 0
+call Manager.new 0
+pop temp 0
+call Manager.register 0
+pop temp 0
 push constant 0
 return

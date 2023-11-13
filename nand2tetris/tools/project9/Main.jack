@@ -2,6 +2,9 @@ class Main {
     function void main() {
         do Visualization.drawBear(0);
         do Visualization.printWelcomeMessage();
+        do Manager.new();
+        do Manager.register();
+
         return;
     }
 }

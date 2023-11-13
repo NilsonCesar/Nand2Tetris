@@ -1,0 +1,32 @@
+class Manager {
+    field Array ingredients, amountOfEachIngredient;
+    field int amountOfIngredients;
+
+    constructor Manager new() {
+        let ingredients = Array.new(1);
+        let amountOfEachIngredient = Array.new(1);
+        let amountOfIngredients = 0;
+        return this;
+    }
+
+    function void register() {
+        var char option;
+        let option = 89;
+
+        while(~(option = 78)) {
+            do Output.printString("You wish register a recipe? Enter with [Y/N]: ");
+            let option = Keyboard.readChar();
+            do Output.println();
+
+            if(option = 89) {
+                do Output.printString("You wanna enter a recipe!");
+            }
+            if(option = 78) {
+                do Output.printString("Exiting the registering...");
+                do Output.println();
+            }
+        }
+
+        return;
+    }
+}

@@ -19,12 +19,12 @@ class Visualization {
         do Memory.poke(memAddress+416, 4080);
         do Memory.poke(memAddress+448, 0);
         do Memory.poke(memAddress+480, 0);
+        do Output.println();
+        do Output.println();
         return;
     }
 
     function void printWelcomeMessage() {
-        do Output.println();
-        do Output.println();
         do Output.printString("Welcome to The Bear Ingredients Manager (TBIM)!");
         do Output.println();
         do Output.printString("Here, you can add your ingredients and the TBIM will compute to you how many of each one of it you will need buy!");
@@ -43,13 +43,13 @@ class Visualization {
 
         do Screen.clearScreen();
         do Output.moveCursor(0, 0);
+        do Visualization.drawBear();
         do Output.printString("The list of ingredients is:");
         do Output.println();
         while(i < numIngredients) {
             do Visualization.printIngredient(ingredients[i], i, amountOfEachIngredient[i]);
             let i = i + 1;
         }
-
         return;
     }
 

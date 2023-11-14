@@ -9,5 +9,8 @@ pop temp 0
 push local 0
 call Manager.register 1
 pop temp 0
+push local 0
+call Visualization.showListIngredients 1
+pop temp 0
 push constant 0
 return

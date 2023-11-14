@@ -658,3 +658,20 @@ pop this 2
 label IF_FALSE1
 push constant 0
 return
+function Manager.getIngredients 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Manager.getAmountOfEachIngredient 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Manager.getNumIngredients 0
+push argument 0
+pop pointer 0
+push this 2
+push constant 1
+add
+return

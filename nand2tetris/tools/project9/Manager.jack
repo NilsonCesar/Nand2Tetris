@@ -96,4 +96,16 @@ class Manager {
 
         return;
     }
+
+    method Array getIngredients() {
+        return ingredients;
+    }
+
+    method Array getAmountOfEachIngredient() {
+        return amountOfEachIngredient;
+    }
+
+    method int getNumIngredients() {
+        return lastIngredientIndex + 1;
+    }
 }

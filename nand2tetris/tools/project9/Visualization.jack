@@ -31,4 +31,38 @@ class Visualization {
         do Output.println();
         return;
     }
+
+    function void showListIngredients(Manager manager) {
+        var Array ingredients, amountOfEachIngredient;
+        var int numIngredients, i;
+
+        let i = 0;
+        let ingredients = manager.getIngredients();
+        let amountOfEachIngredient = manager.getAmountOfEachIngredient();
+        let numIngredients = manager.getNumIngredients();
+
+        do Output.moveCursor(0, 0);
+        do Output.printString("The list of ingredients is:");
+        do Output.println();
+        while(i < numIngredients) {
+            do Visualization.printIngredient(ingredients[i], i, amountOfEachIngredient[i]);
+            let i = i + 1;
+        }
+
+        return;
+    }
+
+    function void printIngredient(String ingredient, int order, int amount) {
+        do Output.println();
+        do Output.printString("Ingredient ");
+        do Output.printInt(order + 1);
+        do Output.printString(":");
+        do Output.println();
+        do Output.printString(ingredient);
+        do Output.println();
+        do Output.printString("Amount of this ingredient to buy: ");
+        do Output.printInt(amount);
+        do Output.println();
+        return;
+    }
 }

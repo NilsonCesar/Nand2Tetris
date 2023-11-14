@@ -6,6 +6,7 @@ class Main {
         do Visualization.drawBear(0);
         do Visualization.printWelcomeMessage();
         do manager.register();
+        do Visualization.showListIngredients(manager);
 
         return;
     }

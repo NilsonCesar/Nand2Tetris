@@ -3,7 +3,7 @@ class Main {
         var Manager manager;
         let manager = Manager.new();
         
-        do Visualization.drawBear(0);
+        do Visualization.drawBear();
         do Visualization.printWelcomeMessage();
         do manager.register();
         do Visualization.showListIngredients(manager);

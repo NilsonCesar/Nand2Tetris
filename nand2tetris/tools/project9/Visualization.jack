@@ -41,6 +41,7 @@ class Visualization {
         let amountOfEachIngredient = manager.getAmountOfEachIngredient();
         let numIngredients = manager.getNumIngredients();
 
+        do Screen.clearScreen();
         do Output.moveCursor(0, 0);
         do Output.printString("The list of ingredients is:");
         do Output.println();

@@ -106,7 +106,8 @@ class JackTokenizer:
         return tokens
     
     def tokenize(self):
-        self.program_tokenized = []
+        self.program_tokenized = ['<tokens>']
         for line in self.lines:
             self.program_tokenized += self.tokenize_line(line)
+        self.program_tokenized += ['</tokens>']
         return self.program_tokenized

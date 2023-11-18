@@ -25,7 +25,7 @@ class JackTokenizer:
         return lines
     
     def make_token(self, token):
-        return f'<{self.type_of(token)}> {self.format_token(token)} <{self.type_of(token)}>'
+        return f'<{self.type_of(token)}> {self.format_token(token)} </{self.type_of(token)}>'
 
     def type_of(self, token):
         if token in JackTokenizer.keywords:

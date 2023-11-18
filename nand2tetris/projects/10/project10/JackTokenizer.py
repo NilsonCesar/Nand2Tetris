@@ -7,6 +7,7 @@ class JackTokenizer:
 
     def format_input(self, program):
         lines = []
+        in_coment = False
         for line in program:
             ans = line
             slash_idx = line.find("//")
@@ -16,8 +17,16 @@ class JackTokenizer:
             
             slash_idx = line.find("/**")
             if slash_idx != -1:
+                in_coment = True
+
+            slash_idx = line.find("*/")
+            if slash_idx != -1:
+                in_coment = False
                 ans = ""
 
+            if in_coment:
+                ans = ""
+            
             ans = ans.strip()
 
             if ans != "":

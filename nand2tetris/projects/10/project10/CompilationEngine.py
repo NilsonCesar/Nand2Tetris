@@ -16,6 +16,12 @@ class CompilationEngine():
         exp = self.make_space(sps) + self.get_current_token()
         self.actToken += 1
         return exp
+    
+    def multEat(self, sps, n):
+        result = []
+        for i in range(n):
+            result += self.eat(sps)
+        return result
 
     def get_element_type(self, token):
         first_lt = token.find('<')
@@ -29,9 +35,7 @@ class CompilationEngine():
     
     def compileClass(self, sps):
         result = ['  ' * sps]+ ['<class>']
-        result += self.eat(sps + 1)
-        result += self.eat(sps + 1)
-        result += self.eat(sps + 1)
+        result += self.multEat(sps + 1, 3)
         while self.get_current_token_value() in ['static', 'field']:
             result += self.compileClassVarDec(sps + 1)
         while self.get_current_token_value() in ['constructor', 'function', 'method']:
@@ -42,25 +46,18 @@ class CompilationEngine():
 
     def compileClassVarDec(self, sps):
         result = ['  ' * sps] + ['<classVarDec>']
-        result += self.eat(sps + 1)
-        result += self.eat(sps + 1)
-        result += self.eat(sps + 1)
+        result += self.multEat(sps + 1, 3)
         while self.get_current_token_value() == ',':
-            result += self.eat(sps + 1)
-            result += self.eat(sps + 1)
+            result += self.multEat(sps + 1, 2)
         result += self.eat(sps + 1)
         result += ['  ' * sps] + ['</classVarDec>']
         return result
     
     def compileSubroutine(self, sps):
         result = ['  ' * sps] + ['<subroutineDec>']
-        result += self.eat(sps + 1)
-        result += self.eat(sps + 1)
-        result += self.eat(sps + 1)
-        result += self.eat(sps + 1)
+        result += self.multEat(sps + 1, 4)
         while self.get_current_token_value() != ')':
-            result += self.eat(sps + 1)
-            result += self.eat(sps + 1)
+            result += self.multEat(sps + 1, 2)
             if self.get_current_token_value() == ',':
                 result += self.eat(sps + 1)
         result += self.eat(sps + 1)
@@ -73,12 +70,19 @@ class CompilationEngine():
         result += self.eat(sps + 1)
         while self.get_current_token_value() == 'var':
             result += self.compileVarDec(sps + 1)
-        result += self.compileVarDec(sps + 1)
         result += self.compileStatements(sps + 1)
         result += self.eat(sps + 1)
         result = ['  ' * sps] + ['</subroutineBody>']
         return result
 
+    def compileVarDec(self, sps):
+        result = ['  ' * sps] + ['<varDec>']
+        result += self.multEat(sps + 1, 3)
+        while self.get_current_token_value() == ',':
+            result += self.multEat(sps + 1, 2)
+        result += self.eat(sps + 1)
+        result += ['  ' * sps] + ['</varDec>']
+        return result
     
 
 test = CompilationEngine([])

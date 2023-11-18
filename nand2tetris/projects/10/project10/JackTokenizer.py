@@ -60,7 +60,6 @@ class JackTokenizer:
         tokens = []
         i = 0
         while i < len(line):
-            print(line)
             if line[i] == ' ':
                 i += 1
                 continue

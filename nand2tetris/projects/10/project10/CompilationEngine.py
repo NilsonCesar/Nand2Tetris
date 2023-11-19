@@ -13,6 +13,9 @@ class CompilationEngine():
         if self.has_more_tokens():
             return self.get_element_value(self.get_current_token())
         return ''
+    
+    def get_current_element_type(self):
+        return self.get_element_type(self.get_current_token())
 
     def make_space(self, sps):
         return ['  ' * sps]
@@ -159,6 +162,57 @@ class CompilationEngine():
             result += self.compileTerm(sps + 1)
         result += self.eat(sps + 1)
         result += self.make_space(sps) + ['</returnStatement>']
+        return result
+    
+    def compileExpression(self, sps):
+        result = self.make_space(sps) + ['<expression>']
+        result += self.compileTerm(sps + 1)
+        while self.get_current_token_value() in ['+', '-', '*', '/', '&', '|', '<', '>', '=']:
+            result += self.eat(sps + 1)
+            result += self.compileTerm(sps + 1)
+        result += self.make_space(sps) + ['</expression>']
+        return result
+    
+    def compileTerm(self, sps):
+        result = self.make_space(sps) + ['<term>']
+        if self.get_current_token_value() == '(':
+            result += self.eat(sps + 1)
+            result += self.compileExpression(sps + 1)
+            result += self.eat(sps + 1)
+        elif self.get_current_token_value() in ['-', '~']:
+            result += self.eat(sps + 1)
+            result += self.compileTerm(sps + 1)
+        elif self.get_current_element_type() == 'integerConstant':
+            result += self.eat(sps + 1)
+        elif self.get_current_element_type() == 'stringConstant':
+            result += self.eat(sps + 1)
+        elif self.get_current_token_value() in ['true', 'false', 'null', 'this']:
+            result += self.eat(sps + 1)
+        elif self.get_current_element_type() == 'identifier':
+            result += self.eat(sps + 1)
+            if self.get_current_token_value() == '(':
+                result += self.eat(sps + 1)
+                result += self.compileExpressionList(sps + 1)
+                result += self.eat(sps + 1)
+            elif self.get_current_token_value() == '[':
+                result += self.eat(sps + 1)
+                result += self.compileExpression(sps + 1)
+                result += self.eat(sps + 1)
+            elif self.get_current_token_value() == '.':
+                result += self.multEat(sps + 1, 3)
+                result += self.compileExpressionList(sps + 1)
+                result += self.eat(sps + 1)
+        result += self.make_space(sps) + ['</term>']
+        return result
+    
+    def compileExpressionList(self, sps):
+        result = self.make_space(sps) + ['<expressionList>']
+        if self.get_current_token_value() != ')':
+            result += self.compileExpression(sps + 1)
+            while self.get_current_token_value() != ')':
+                result += self.eat(sps + 1)
+                result += self.compileExpression(sps + 1)
+        result += self.make_space(sps) + ['</expressionList>']
         return result
 
 test = CompilationEngine([])

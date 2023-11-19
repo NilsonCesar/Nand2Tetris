@@ -73,7 +73,7 @@ class CompilationEngine():
     
     def compileParameterList(self, sps):
         result = self.make_space(sps, '<parameterList>')
-        while self.get_current_token_value in ['int', 'char', 'boolean'] or self.get_current_element_type() == 'identifier':
+        while self.get_current_token_value() in ['int', 'char', 'boolean'] or self.get_current_element_type() == 'identifier':
             result += self.multEat(sps + 1, 2)
             if self.get_current_token_value() == ',':
                 result += self.eat(sps + 1)
@@ -166,7 +166,7 @@ class CompilationEngine():
         result = self.make_space(sps, '<returnStatement>')
         result += self.eat(sps + 1)
         if self.get_current_token_value() != ';':
-            result += self.compileTerm(sps + 1)
+            result += self.compileExpression(sps + 1)
         result += self.eat(sps + 1)
         result += self.make_space(sps, '</returnStatement>')
         return result
@@ -224,7 +224,6 @@ class CompilationEngine():
     
     def compileActToken(self):
         token_value = self.get_current_token_value()
-        # print(self.get_current_token(), token_value, self.actToken)
         if token_value == 'class':
             return self.compileClass(0)
         elif token_value in ['let', 'if', 'while', 'do', 'return']:

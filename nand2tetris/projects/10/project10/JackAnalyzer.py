@@ -18,7 +18,7 @@ def parse_file(file_path):
     tokenizer.tokenize()
     compilation_engine = CompilationEngine.CompilationEngine(tokenizer.program_tokenized)
     compilation_engine.compileTokens()
-    dest = file_path[:-5] + "A.xml"
+    dest = file_path[:-5] + ".xml"
     with open(dest, "w") as file:
         for line in compilation_engine.compiled_tokens:
             file.write(line)

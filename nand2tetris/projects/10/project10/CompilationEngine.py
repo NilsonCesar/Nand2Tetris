@@ -214,6 +214,18 @@ class CompilationEngine():
                 result += self.compileExpression(sps + 1)
         result += self.make_space(sps) + ['</expressionList>']
         return result
-
-test = CompilationEngine([])
-print(test.get_element_value("<keyword> class </keyword>"))
+    
+    def compileActToken(self):
+        token_value = self.get_current_token_value()
+        if token_value == 'class':
+            return self.compileClass(0)
+        elif token_value in ['let', 'if', 'while', 'do', 'return']:
+            return self.compileStatements(0)
+        else:
+            return self.compileExpression(0)
+    
+    def compileTokens(self):
+        self.compiled_tokens = []
+        while self.has_more_tokens():
+            self.compiled_tokens += self.compileActToken()
+        return self.compiled_tokens

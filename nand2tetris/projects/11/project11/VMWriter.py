@@ -11,3 +11,6 @@ class VMWriter:
     
     def writeArithmetic(self, command):
         self.vm_comands += [command]
+    
+    def writeLabel(self, label):
+        self.vm_comands += [f'({label})']

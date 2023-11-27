@@ -41,9 +41,17 @@ class SymbolTable:
     
     def kindOf(self, name):
         if name in self.sb_class_level.keys():
-            return self.sb_class_level[name][1]
-        if name in self.sb_subroutine_level.keys():
-            return self.sb_subroutine_level[name][1]
+            kind = self.sb_class_level[name][1]
+            if kind == 'STATIC':
+                return 'static'
+            else:
+                return 'field'
+        elif name in self.sb_subroutine_level.keys():
+            kind = self.sb_subroutine_level[name][1]
+            if kind == 'ARG':
+                return 'argument'
+            else:
+                return 'local'
         return 'NONE'
 
     def typeOf(self, name):

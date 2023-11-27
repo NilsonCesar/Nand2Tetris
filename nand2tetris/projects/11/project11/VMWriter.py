@@ -23,3 +23,6 @@ class VMWriter:
 
     def writeCall(self, name, nVars):
         self.vm_comands += [f'call {name} {nVars}']
+    
+    def writeFunction(self, name, nVars):
+        self.vm_comands += [f'function {name} {nVars}']

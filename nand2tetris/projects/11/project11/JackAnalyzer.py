@@ -18,7 +18,7 @@ class JackAnalyzer():
         return self.get_element_type(self.get_current_token())
 
     def make_space(self, sps, exp):
-        return ['  ' * sps + str(exp)]
+        return [str(exp)]
     
     def eat(self, sps):
         exp = self.make_space(sps, self.get_current_token())
@@ -231,11 +231,8 @@ class JackAnalyzer():
             return self.compileExpression(0)
     
     def compileTokens(self):
-        count = 0
         self.compiled_tokens = []
         while self.has_more_tokens():
             self.compiled_tokens += self.compileActToken()
             count += 1
-            if count == 100:
-                return self.compiled_tokens
         return self.compiled_tokens

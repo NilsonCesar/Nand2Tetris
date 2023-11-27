@@ -1,7 +1,6 @@
 class VMWriter:
     def __init__(self, file_name):
         self.vm_comands = []
-        self.file_name = file_name
 
     def writePush(self, segment, index):
         self.vm_comands += [f'push {segment} {index}']
@@ -29,9 +28,3 @@ class VMWriter:
     
     def writeReturn(self):
         self.vm_comands += ['return']
-    
-    def writeVMComands(self):
-        with open(self.file_name, 'w') as file:
-            for line in self.vm_comands:
-                file.write(line)
-                file.write('\n')

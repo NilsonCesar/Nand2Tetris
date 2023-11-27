@@ -45,7 +45,7 @@ class SymbolTable:
             if kind == 'STATIC':
                 return 'static'
             else:
-                return 'field'
+                return 'this'
         elif name in self.sb_subroutine_level.keys():
             kind = self.sb_subroutine_level[name][1]
             if kind == 'ARG':

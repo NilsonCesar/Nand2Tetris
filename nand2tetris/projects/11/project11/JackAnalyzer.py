@@ -234,5 +234,4 @@ class JackAnalyzer():
         self.compiled_tokens = []
         while self.has_more_tokens():
             self.compiled_tokens += self.compileActToken()
-            count += 1
         return self.compiled_tokens

@@ -18,4 +18,5 @@ class VMWriter:
     def writeGoto(self, label):
         self.vm_comands += [f'goto {label}']
 
-    
+    def writeIf(self, label):
+        self.vm_comands += [f'if-goto {label}']

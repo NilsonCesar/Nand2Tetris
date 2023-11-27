@@ -118,8 +118,7 @@ class CompilationEngine():
     
     def compileLet(self, sps):
         result = self.make_space(sps, '<letStatement>')
-        result += self.eat(sps + 1)
-        result += self.eat(sps + 1)
+        result += self.multEat(sps + 1, 2)
         if self.get_current_token_value() == '[':
             result += self.eat(sps + 1)
             result += self.compileExpression(sps + 1)

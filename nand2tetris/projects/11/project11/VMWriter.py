@@ -20,3 +20,6 @@ class VMWriter:
 
     def writeIf(self, label):
         self.vm_comands += [f'if-goto {label}']
+
+    def writeCall(self, name, nVars):
+        self.vm_comands += [f'call {name} {nVars}']

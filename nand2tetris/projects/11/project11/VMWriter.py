@@ -26,3 +26,7 @@ class VMWriter:
     
     def writeFunction(self, name, nVars):
         self.vm_comands += [f'function {name} {nVars}']
+    
+    def writeReturn(self):
+        self.vm_comands += ['return']
+    

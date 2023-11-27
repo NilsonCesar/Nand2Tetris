@@ -30,3 +30,8 @@ class VMWriter:
     def writeReturn(self):
         self.vm_comands += ['return']
     
+    def writeVMComands(self):
+        with open(self.file_name, 'w') as file:
+            for line in self.vm_comands:
+                file.write(line)
+                file.write('\n')

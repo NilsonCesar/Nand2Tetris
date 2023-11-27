@@ -8,3 +8,6 @@ class VMWriter:
     
     def writePop(self, segment, index):
         self.vm_comands += [f'push {segment} {index}']
+    
+    def writeArithmetic(self, command):
+        self.vm_comands += [command]

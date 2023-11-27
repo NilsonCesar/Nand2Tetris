@@ -1,0 +1,10 @@
+class VMWriter:
+    def __init__(self, file_name):
+        self.vm_comands = []
+        self.file_name = file_name
+
+    def writePush(self, segment, index):
+        self.vm_comands += [f'push {segment} {index}']
+    
+    def writePop(self, segment, index):
+        self.vm_comands += [f'push {segment} {index}']

@@ -58,4 +58,4 @@ class SymbolTable:
             return self.sb_class_level[name][2]
         if name in self.sb_subroutine_level.keys():
             return self.sb_subroutine_level[name][2]
-        return 'NONE'
+        return -1

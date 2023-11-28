@@ -51,6 +51,12 @@ class CompilationEngine:
         self.advance()
         return [name, type, kind]
 
+    def createVarVariable(self, type):
+        kind = "VAR"
+        name = self.getCurrentTokenValue()
+        self.advance()
+        return [name, type, kind]
+
     def compileClassVarDec(self):
         self.advance()
         variable = self.createClassVariable()
@@ -65,3 +71,15 @@ class CompilationEngine:
             if self.getCurrentTokenValue() == ',':
                 self.advance()
         self.advance()
+
+    def compileVarDec(self):
+        self.multAdvance(2)
+        type = self.getCurrentTokenValue()
+        self.advance()
+        variable = self.createVarVariable(type)
+        self.symbol_table.define(variable[0], variable[1], variable[2])
+        while self.getCurrentTokenValue() != ';':
+            self.advance()
+            variable = self.createVarVariable(type)
+            self.symbol_table.define(variable[0], variable[1], variable[2])
+        self.multAdvance(2)

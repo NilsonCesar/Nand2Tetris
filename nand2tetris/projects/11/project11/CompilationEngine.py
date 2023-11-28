@@ -98,8 +98,9 @@ class CompilationEngine:
             self.vmwriter.writeArithmetic(op)
         self.advance()
 
-    def compileTerm(self):
-        self.advance()
+    def compileTerm(self, inDo = False):
+        if(not inDo):
+            self.advance()
         tokenType = self.getCurrentTokenType()
         if tokenType == 'integerConstant':
             self.vmwriter.writePush('constant', self.getCurrentTokenValue())
@@ -145,7 +146,10 @@ class CompilationEngine:
                 self.advance()
             elif value == 'this':
                 self.vmwriter.writePush('pointer', 0)
+                self.advance()
 
+        if(not inDo):
+            self.advance()
     def compileLet(self):
         self.multAdvance(2)
         name = self.getCurrentTokenValue()
@@ -165,3 +169,10 @@ class CompilationEngine:
             self.compileExpression()
         self.vmwriter.writeReturn()
         self.multAdvance(2)
+
+    def compileDo(self):
+        self.multAdvance(2)
+        self.compileTerm(True)
+        while self.getCurrentTokenValue != '/doStatement':
+            self.advance()
+        self.advance()

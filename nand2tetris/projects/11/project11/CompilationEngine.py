@@ -13,7 +13,8 @@ class CompilationEngine:
         self.label_num = 1
         self.name_file = ''
         self.num_fields = 0
-    
+        self.void_functions = []
+
     def populeSymbolTable(self, variable):
         self.symbol_table.define(variable[0], variable[1], variable[2])
 
@@ -38,6 +39,15 @@ class CompilationEngine:
         first_gt = token.find('>')
         return token[first_gt + 2: second_lt]
     
+    def getNumberOfVarDec(self):
+        num = 0
+        cur = self.act_token
+        while self.tokens[cur] != '<statements>':
+            if self.tokens[cur] == '<varDec>':
+                num += 1
+            cur += 1
+        return num
+
     def createClassVariable(self):
         kind = self.getCurrentTokenValue()
         self.advance()
@@ -247,6 +257,39 @@ class CompilationEngine:
         self.advance()
         return n
     
+    def compileSubroutineBody(self, routineType, routineName):
+        self.multAdvance(2)
+        while self.getCurrentTokenType == 'varDec':
+            self.compileVarDec()
+
+        if routineType == 'constructor':
+            self.vmwriter.writePush('constant', self.num_fields)
+            self.vmwriter.writeCall('Memory.alloc', 1)
+            self.vmwriter.writePop('pointer', 0)
+        self.compileStatements()
+        self.multAdvance(2)
+
+        if routineName in self.void_functions:
+            self.vmwriter.vm_comands = self.vmwriter.vm_comands[:-1] + ['push constant 0', 'return']
+
+    def compileSubroutine(self):
+        self.advance()
+        routineType = self.getCurrentTokenValue()
+        self.advance()
+        routineKind = self.getCurrentTokenValue()
+        self.advance()
+        if routineKind == 'void':
+            self.void_functions.append(routineKind)
+        routineName = self.getCurrentTokenValue()
+        self.advance()
+        n = self.getNumberOfVarDec()
+        self.vmwriter.writeFunction(routineName, n)
+        self.advance()
+        self.compileParameterList()
+        self.advance()
+        self.compileSubroutineBody(routineType, routineName)
+        self.advance()
+
     def compileClass(self):
         self.multAdvance(2)
         name = self.getCurrentTokenValue()
@@ -257,5 +300,5 @@ class CompilationEngine:
         while self.getCurrentTokenType() == 'classVarDec':
             self.compileClassVarDec()
         while self.getCurrentTokenType() == 'subroutineDec':
-            self.compileSubroutineDec()
+            self.compileSubroutine()
         self.multAdvance(2)

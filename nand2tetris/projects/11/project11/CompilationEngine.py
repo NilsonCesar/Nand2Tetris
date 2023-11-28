@@ -1,7 +1,7 @@
 import JackTokenizer, Parser, SymbolTable, VMWriter
 
 class CompilationEngine:
-    def __init__(self, program, name_file, label_name = 'default'):
+    def __init__(self, program):
         tokens = JackTokenizer.JackTokenizer(program)
         tokens = tokens.tokenize()
         analyzer = Parser.Parser(tokens)
@@ -9,9 +9,10 @@ class CompilationEngine:
         self.symbol_table = SymbolTable.SymbolTable()
         self.vmwriter = VMWriter.VMWriter()
         self.act_token = 0
-        self.label_name = label_name
+        self.label_name = ''
         self.label_num = 1
-        self.name_file = name_file
+        self.name_file = ''
+        self.num_fields = 0
     
     def populeSymbolTable(self, variable):
         self.symbol_table.define(variable[0], variable[1], variable[2])
@@ -41,6 +42,7 @@ class CompilationEngine:
         kind = self.getCurrentTokenValue()
         self.advance()
         if kind == 'field':
+            self.num_fields += 1
             kind = 'FIELD'
         if kind == 'static':
             kind = 'STATIC'
@@ -68,7 +70,11 @@ class CompilationEngine:
         self.advance()
         variable = self.createClassVariable()
         self.populeSymbolTable(variable)
-        self.multAdvance(3)
+        while self.getCurrentTokenValue() != ';':
+            self.advance()
+            variable = self.createClassVariable()
+            self.populeSymbolTable(variable)
+        self.multAdvance(2)
 
     def compileParameterList(self):
         self.advance()
@@ -240,3 +246,16 @@ class CompilationEngine:
                 self.advance()
         self.advance()
         return n
+    
+    def compileClass(self):
+        self.multAdvance(2)
+        name = self.getCurrentTokenValue()
+        self.name_file = name
+        self.label_name = name
+        self.multAdvance(2)
+
+        while self.getCurrentTokenType() == 'classVarDec':
+            self.compileClassVarDec()
+        while self.getCurrentTokenType() == 'subroutineDec':
+            self.compileSubroutineDec()
+        self.multAdvance(2)

@@ -1,7 +1,7 @@
 import JackTokenizer, Parser, SymbolTable, VMWriter
 
 class CompilationEngine:
-    def __init__(self, program):
+    def __init__(self, program, label_name = 'default'):
         tokens = JackTokenizer.JackTokenizer(program)
         tokens = tokens.tokenize()
         analyzer = Parser.Parser(tokens)
@@ -9,6 +9,8 @@ class CompilationEngine:
         self.symbol_table = SymbolTable.SymbolTable()
         self.vmwriter = VMWriter.VMWriter()
         self.act_token = 0
+        self.label_name = label_name
+        self.label_num = 1
     
     def populeSymbolTable(self, variable):
         self.symbol_table.define(variable[0], variable[1], variable[2])
@@ -176,3 +178,21 @@ class CompilationEngine:
         while self.getCurrentTokenValue != '/doStatement':
             self.advance()
         self.advance()
+
+    def compileIf(self):
+        self.multAdvance(3)
+        self.compileExpression()
+        self.vmwriter.writeArithmetic('-', True)
+        self.vmwriter.writeIf(f'${self.label_name + self.label_num}')
+        self.label_num += 1
+        self.multAdvance(2)
+        self.compileStatements()
+        self.vmwriter.writeGoto(f'${self.label_name + self.label_num}')
+        self.label_num += 1
+        self.advance()
+        self.vmwriter.writeLabel(f'${self.label_name + (self.label_num - 1)}')
+        if self.getCurrentTokenValue == 'else':
+            self.multAdvance(2)
+            self.compileStatements()
+            self.advance()
+        self.vmwriter.writeLabel(f'${self.label_name + (self.label_num - 1)}')

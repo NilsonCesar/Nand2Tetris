@@ -87,3 +87,13 @@ class CompilationEngine:
             variable = self.createVarVariable(type)
             self.populeSymbolTable(variable)
         self.multAdvance(2)
+
+    def compileExpression(self):
+        self.advance()
+        self.compileTerm()
+        while self.getCurrentTokenType() != '/expression':
+            op = self.getCurrentTokenValue()
+            self.advance()
+            self.compileTerm()
+            self.vmwriter.writeArithmetic(op)
+        self.advance()

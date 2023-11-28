@@ -196,3 +196,17 @@ class CompilationEngine:
             self.compileStatements()
             self.advance()
         self.vmwriter.writeLabel(f'${self.label_name + (self.label_num - 1)}')
+
+    def compileWhile(self):
+        self.vmwriter.writeLabel(f'${self.label_name + self.label_num}')
+        self.label_num += 1
+        self.multAdvance(3)
+        self.compileExpression()
+        self.vmwriter.writeArithmetic('-', True)
+        self.vmwriter.writeIf(f'${self.label_name + self.label_num}')
+        self.multAdvance(2)
+        self.compileStatements()
+        self.multAdvance(2)
+        self.vmwriter.writeGoto(f'${self.label_name + (self.label_num - 1)}')
+        self.vmwriter.writeLabel(f'${self.label_name + self.label_num}')
+        self.label_num += 1

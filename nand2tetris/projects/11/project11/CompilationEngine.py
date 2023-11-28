@@ -121,7 +121,7 @@ class CompilationEngine:
                 n = self.compileExpressionList()
                 self.advance()
                 self.vmwriter.writeCall(name, n)
-            else:
+            elif self.getCurrentTokenValue() != '[':
                 self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
                 self.advance()
         elif tokenType == 'symbol':
@@ -145,3 +145,14 @@ class CompilationEngine:
                 self.advance()
             elif value == 'this':
                 self.vmwriter.writePush('pointer', 0)
+
+    def compileLet(self):
+        self.multAdvance(2)
+        name = self.getCurrentTokenValue()
+        self.advance()
+        if self.getCurrentTokenValue() != '[':
+            self.advance()
+            self.compileExpression()
+            self.vmwriter.writePop(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
+            self.advance()
+        self.advance()

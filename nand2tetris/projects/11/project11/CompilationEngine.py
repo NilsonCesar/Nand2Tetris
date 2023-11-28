@@ -231,9 +231,12 @@ class CompilationEngine:
         self.advance()
     
     def compileExpressionList(self):
+        n = 0
         self.advance()
         while self.getCurrentTokenType != '/expressionList':
+            n += 1
             self.compileExpression()
             if self.getCurrentTokenValue == ',':
                 self.advance()
         self.advance()
+        return n

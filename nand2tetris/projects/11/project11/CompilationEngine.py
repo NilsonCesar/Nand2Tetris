@@ -228,3 +228,11 @@ class CompilationEngine:
             if tokenType == 'returnStatement':
                 self.compileReturn()
         self.advance()
+    
+    def compileExpressionList(self):
+        self.advance()
+        while self.getCurrentTokenType != '/expressionList':
+            self.compileExpression()
+            if self.getCurrentTokenValue == ',':
+                self.advance()
+        self.advance()

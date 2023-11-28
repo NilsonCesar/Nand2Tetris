@@ -156,3 +156,12 @@ class CompilationEngine:
             self.vmwriter.writePop(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
             self.advance()
         self.advance()
+
+    def compileReturn(self):
+        self.multAdvance(2)
+        if self.getCurrentTokenValue == ';':
+            self.vmwriter.writePush('constant', 0)
+        else:
+            self.compileExpression()
+        self.vmwriter.writeReturn()
+        self.multAdvance(2)

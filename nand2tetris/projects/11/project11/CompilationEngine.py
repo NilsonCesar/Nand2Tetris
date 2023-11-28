@@ -103,6 +103,16 @@ class CompilationEngine:
         tokenType = self.getCurrentTokenType()
         if tokenType == 'integerConstant':
             self.vmwriter.writePush('constant', self.getCurrentTokenValue())
+            self.advance()
+        elif tokenType == 'stringConstant':
+            string = self.getCurrentTokenValue()
+            self.vmwriter.writePush('constant', len(string))
+            self.vmwriter.writeCall('String.new', 1)
+
+            for c in string:
+                self.vmwriter.writePush('constant', ord(c))
+                self.vmwriter.writeCall('String.appendChar', 2)
+            self.advance()
         elif tokenType == 'identifier':
             name = self.getCurrentTokenValue()
             self.advance()
@@ -113,7 +123,8 @@ class CompilationEngine:
                 self.vmwriter.writeCall(name, n)
             else:
                 self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
-        if tokenType == 'symbol':
+                self.advance()
+        elif tokenType == 'symbol':
             if self.getCurrentTokenValue == '(':
                 self.advance()
                 self.compileExpression()
@@ -123,4 +134,3 @@ class CompilationEngine:
                 self.advance()
                 self.compileTerm()
                 self.vmwriter.writeArithmetic(op)
-

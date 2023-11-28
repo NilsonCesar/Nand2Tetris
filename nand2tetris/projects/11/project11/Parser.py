@@ -1,4 +1,4 @@
-class JackAnalyzer():
+class Parser():
     def __init__(self, tokens):
         self.tokens = tokens[1:-1]
         self.actToken = 0

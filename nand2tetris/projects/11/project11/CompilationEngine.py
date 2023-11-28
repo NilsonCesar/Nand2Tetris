@@ -1,10 +1,10 @@
-import JackTokenizer, JackAnalyzer, SymbolTable
+import JackTokenizer, Parser, SymbolTable
 
 class CompilationEngine:
     def __init__(self, program):
         tokens = JackTokenizer.JackTokenizer(program)
         tokens = tokens.tokenize()
-        analyzer = JackAnalyzer.JackAnalyzer(tokens)
+        analyzer = Parser.Parser(tokens)
         self.tokens = analyzer.compileTokens()
         self.symbol_table = SymbolTable.SymbolTable()
         self.act_token = 0

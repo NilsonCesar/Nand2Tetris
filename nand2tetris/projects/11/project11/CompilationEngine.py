@@ -1,4 +1,4 @@
-import JackTokenizer, Parser, SymbolTable
+import JackTokenizer, Parser, SymbolTable, VMWriter
 
 class CompilationEngine:
     def __init__(self, program):
@@ -7,6 +7,7 @@ class CompilationEngine:
         analyzer = Parser.Parser(tokens)
         self.tokens = analyzer.compileTokens()
         self.symbol_table = SymbolTable.SymbolTable()
+        self.vmwriter = VMWriter.VMWriter()
         self.act_token = 0
     
     def populeSymbolTable(self, variable):

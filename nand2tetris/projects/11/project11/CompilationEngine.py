@@ -97,3 +97,30 @@ class CompilationEngine:
             self.compileTerm()
             self.vmwriter.writeArithmetic(op)
         self.advance()
+
+    def compileTerm(self):
+        self.advance()
+        tokenType = self.getCurrentTokenType()
+        if tokenType == 'integerConstant':
+            self.vmwriter.writePush('constant', self.getCurrentTokenValue())
+        elif tokenType == 'identifier':
+            name = self.getCurrentTokenValue()
+            self.advance()
+            if self.getCurrentTokenValue() == '(':
+                self.advance()
+                n = self.compileExpressionList()
+                self.advance()
+                self.vmwriter.writeCall(name, n)
+            else:
+                self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
+        if tokenType == 'symbol':
+            if self.getCurrentTokenValue == '(':
+                self.advance()
+                self.compileExpression()
+                self.advance()
+            else:
+                op = self.getCurrentTokenValue()
+                self.advance()
+                self.compileTerm()
+                self.vmwriter.writeArithmetic(op)
+

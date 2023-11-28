@@ -1,7 +1,7 @@
 import JackTokenizer, Parser, SymbolTable, VMWriter
 
 class CompilationEngine:
-    def __init__(self, program, label_name = 'default'):
+    def __init__(self, program, name_file, label_name = 'default'):
         tokens = JackTokenizer.JackTokenizer(program)
         tokens = tokens.tokenize()
         analyzer = Parser.Parser(tokens)
@@ -11,6 +11,7 @@ class CompilationEngine:
         self.act_token = 0
         self.label_name = label_name
         self.label_num = 1
+        self.name_file = name_file
     
     def populeSymbolTable(self, variable):
         self.symbol_table.define(variable[0], variable[1], variable[2])
@@ -123,7 +124,7 @@ class CompilationEngine:
                 self.advance()
                 n = self.compileExpressionList()
                 self.advance()
-                self.vmwriter.writeCall(name, n)
+                self.vmwriter.writeCall(self.name_file + '.' + name, n)
             elif self.getCurrentTokenValue() != '[':
                 self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
                 self.advance()

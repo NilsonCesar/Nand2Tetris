@@ -180,33 +180,35 @@ class CompilationEngine:
         self.advance()
 
     def compileIf(self):
+        l1 = self.label_num
+        l2 = self.label_num + 1
+        self.label_num += 2
         self.multAdvance(3)
         self.compileExpression()
         self.vmwriter.writeArithmetic('-', True)
-        self.vmwriter.writeIf(f'${self.label_name + self.label_num}')
-        self.label_num += 1
+        self.vmwriter.writeIf(f'${self.label_name + l1}')
         self.multAdvance(2)
         self.compileStatements()
-        self.vmwriter.writeGoto(f'${self.label_name + self.label_num}')
-        self.label_num += 1
+        self.vmwriter.writeGoto(f'${self.label_name + l2}')
         self.advance()
-        self.vmwriter.writeLabel(f'${self.label_name + (self.label_num - 1)}')
+        self.vmwriter.writeLabel(f'${self.label_name + l1}')
         if self.getCurrentTokenValue == 'else':
             self.multAdvance(2)
             self.compileStatements()
             self.advance()
-        self.vmwriter.writeLabel(f'${self.label_name + (self.label_num - 1)}')
+        self.vmwriter.writeLabel(f'${self.label_name + l2}')
 
     def compileWhile(self):
-        self.vmwriter.writeLabel(f'${self.label_name + self.label_num}')
-        self.label_num += 1
+        l1 = self.label_num
+        l2 = self.label_num + 1
+        self.label_num += 2
+        self.vmwriter.writeLabel(f'${self.label_name + l1}')
         self.multAdvance(3)
         self.compileExpression()
         self.vmwriter.writeArithmetic('-', True)
-        self.vmwriter.writeIf(f'${self.label_name + self.label_num}')
+        self.vmwriter.writeIf(f'${self.label_name + l2}')
         self.multAdvance(2)
         self.compileStatements()
         self.multAdvance(2)
-        self.vmwriter.writeGoto(f'${self.label_name + (self.label_num - 1)}')
-        self.vmwriter.writeLabel(f'${self.label_name + self.label_num}')
-        self.label_num += 1
+        self.vmwriter.writeGoto(f'${self.label_name + l1}')
+        self.vmwriter.writeLabel(f'${self.label_name + l2}')

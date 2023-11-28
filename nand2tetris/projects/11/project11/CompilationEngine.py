@@ -212,3 +212,19 @@ class CompilationEngine:
         self.multAdvance(2)
         self.vmwriter.writeGoto(f'${self.label_name + l1}')
         self.vmwriter.writeLabel(f'${self.label_name + l2}')
+    
+    def compileStatements(self):
+        self.advance()
+        while self.getCurrentTokenType() != '/statements':
+            tokenType = self.getCurrentTokenType()
+            if tokenType == 'letStatement':
+                self.compileLet()
+            if tokenType == 'ifStatement':
+                self.compileIf()
+            if tokenType == 'whileStatement':
+                self.compileWhile()
+            if tokenType == 'doStatement':
+                self.compileDo()
+            if tokenType == 'returnStatement':
+                self.compileReturn()
+        self.advance()

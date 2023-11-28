@@ -20,13 +20,13 @@ class VMWriter:
             self.writeCall('Math.multiply', 2)
         if command == '/':
             self.writeCall('Math.divide', 2)
-        if command == '&':
+        if command == '&amp;':
             self.vm_comands += ['and']
         if command == '|':
             self.vm_comands += ['or']
-        if command == '<':
+        if command == '&lt;':
             self.vm_comands += ['lt']
-        if command == '>':
+        if command == '&gt;':
             self.vm_comands += ['gt']
         if command == '=':
             self.vm_comands += ['eq']

@@ -134,3 +134,14 @@ class CompilationEngine:
                 self.advance()
                 self.compileTerm()
                 self.vmwriter.writeArithmetic(op)
+        elif tokenType == 'keyword':
+            value = self.getCurrentTokenValue()
+            if value == 'true':
+                self.vmwriter.writePush('constant', 1)
+                self.vmwriter.writeArithmetic('-', True)
+                self.advance()
+            elif value in ['false', 'null']:
+                self.vmwriter.writePush('constant', 0)
+                self.advance()
+            elif value == 'this':
+                self.vmwriter.writePush('pointer', 0)

@@ -1,5 +1,5 @@
 class VMWriter:
-    def __init__(self, file_name):
+    def __init__(self):
         self.vm_comands = []
 
     def writePush(self, segment, index):

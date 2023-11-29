@@ -149,6 +149,19 @@ class CompilationEngine:
                 self.vmwriter.writeCall(self.name_file + '.' + name, n)
                 if name in self.void_functions:
                     self.vmwriter.writePop('temp', 0)
+            elif self.getCurrentTokenValue() == '.':
+                n = 0
+                self.advance()
+                subroutineName = self.getCurrentTokenValue()
+                self.multAdvance(2)
+                if name in self.method_functions():
+                    n = 1
+                    self.vmwriter.push('pointer', 0)
+                n += self.compileExpressionList()
+                self.vmwriter.writeCall(f'{name}.{subroutineName}', n)
+                if name in self.void_functions:
+                    self.vmwriter.writePop('temp', 0)
+                self.advance()
             elif self.getCurrentTokenValue() != '[':
                 self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
                 self.advance()
@@ -160,18 +173,6 @@ class CompilationEngine:
                 self.advance()
                 self.vmwriter.writePop('pointer', 1)
                 self.vmwriter.writePush('that', 0)
-
-            elif self.getCurrentTokenValue() == '.':
-                n = 0
-                self.advance()
-                subroutineName = self.getCurrentTokenValue()
-                self.multAdvance(2)
-                if name in self.method_functions():
-                    n = 1
-                    self.vmwriter.push('pointer', 0)
-                n += self.compileExpressionList()
-                self.advance()
-                self.vmwriter.writeCall(f'{name}.{subroutineName}', n)
 
         elif tokenType == 'symbol':
             if self.getCurrentTokenValue == '(':

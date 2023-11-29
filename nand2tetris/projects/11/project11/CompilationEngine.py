@@ -15,6 +15,7 @@ class CompilationEngine:
         self.num_fields = 0
         self.void_functions = []
         self.method_functions = []
+        self.class_functions = []
 
     def populeSymbolTable(self, variable):
         self.symbol_table.define(variable[0], variable[1], variable[2])
@@ -151,6 +152,18 @@ class CompilationEngine:
             elif self.getCurrentTokenValue() != '[':
                 self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
                 self.advance()
+            elif self.getCurrentTokenValue() == '.':
+                n = 0
+                self.advance()
+                subroutineName = self.getCurrentTokenValue()
+                self.multAdvance(2)
+                if name in self.method_functions():
+                    n = 1
+                    self.vmwriter.push('pointer', 0)
+                n += self.compileExpressionList()
+                self.advance()
+                self.vmwriter.writeCall(f'{name}.{subroutineName}', n)
+
         elif tokenType == 'symbol':
             if self.getCurrentTokenValue == '(':
                 self.advance()
@@ -276,6 +289,8 @@ class CompilationEngine:
         if routineType == 'method':
             self.vmwriter.writePush('argument', 0)
             self.vmwriter.writePop('pointer', 0)
+        if routineType == 'function':
+            self.class_functions.append(routineType)
         self.compileStatements()
         self.multAdvance(2)
 
@@ -293,7 +308,7 @@ class CompilationEngine:
         if routineKind == 'void':
             self.void_functions.append(routineName)
         n = self.getNumberOfVarDec()
-        self.vmwriter.writeFunction(routineName, n)
+        self.vmwriter.writeFunction(self.name_file + '.' + routineName, n)
         self.advance()
         self.compileParameterList()
         self.advance()

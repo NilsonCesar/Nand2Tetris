@@ -14,6 +14,7 @@ class CompilationEngine:
         self.name_file = ''
         self.num_fields = 0
         self.void_functions = []
+        self.method_functions = []
 
     def populeSymbolTable(self, variable):
         self.symbol_table.define(variable[0], variable[1], variable[2])
@@ -137,10 +138,16 @@ class CompilationEngine:
             name = self.getCurrentTokenValue()
             self.advance()
             if self.getCurrentTokenValue() == '(':
+                n = 0
+                if name in self.method_functions:
+                    n = 1
+                    self.vmwriter.writePush('pointer', 0)
                 self.advance()
-                n = self.compileExpressionList()
+                n += self.compileExpressionList()
                 self.advance()
                 self.vmwriter.writeCall(self.name_file + '.' + name, n)
+                if name in self.void_functions:
+                    self.vmwriter.writePop('temp', 0)
             elif self.getCurrentTokenValue() != '[':
                 self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
                 self.advance()
@@ -257,7 +264,7 @@ class CompilationEngine:
         self.advance()
         return n
     
-    def compileSubroutineBody(self, routineType, routineName):
+    def compileSubroutineBody(self, routineType):
         self.multAdvance(2)
         while self.getCurrentTokenType == 'varDec':
             self.compileVarDec()
@@ -266,22 +273,25 @@ class CompilationEngine:
             self.vmwriter.writePush('constant', self.num_fields)
             self.vmwriter.writeCall('Memory.alloc', 1)
             self.vmwriter.writePop('pointer', 0)
+        if routineType == 'method':
+            self.vmwriter.writePush('argument', 0)
+            self.vmwriter.writePop('pointer', 0)
         self.compileStatements()
         self.multAdvance(2)
 
-        if routineName in self.void_functions:
-            self.vmwriter.vm_comands = self.vmwriter.vm_comands[:-1] + ['push constant 0', 'return']
-
     def compileSubroutine(self):
+        self.symbol_table.startSubroutine()
         self.advance()
         routineType = self.getCurrentTokenValue()
         self.advance()
         routineKind = self.getCurrentTokenValue()
         self.advance()
-        if routineKind == 'void':
-            self.void_functions.append(routineKind)
         routineName = self.getCurrentTokenValue()
         self.advance()
+        if routineType == 'method':
+            self.method_functions.append(routineName)
+        if routineKind == 'void':
+            self.void_functions.append(routineName)
         n = self.getNumberOfVarDec()
         self.vmwriter.writeFunction(routineName, n)
         self.advance()

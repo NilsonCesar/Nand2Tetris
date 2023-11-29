@@ -231,11 +231,7 @@ class CompilationEngine():
             return self.compileExpression(0)
     
     def compileTokens(self):
-        count = 0
         self.compiled_tokens = []
         while self.has_more_tokens():
             self.compiled_tokens += self.compileActToken()
-            count += 1
-            if count == 100:
-                return self.compiled_tokens
         return self.compiled_tokens

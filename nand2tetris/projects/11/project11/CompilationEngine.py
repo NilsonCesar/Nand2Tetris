@@ -17,11 +17,16 @@ class CompilationEngine:
         self.method_functions = []
         self.class_functions = []
 
+    def has_more_tokens(self):
+        return self.act_token < len(self.tokens)
+
     def populeSymbolTable(self, variable):
         self.symbol_table.define(variable[0], variable[1], variable[2])
 
     def advance(self):
-        self.act_token += 1
+        if self.has_more_tokens():
+            self.act_token += 1
+        return len(self.tokens) - 1
 
     def multAdvance(self, n):
         self.act_token = self.act_token + n
@@ -357,3 +362,12 @@ class CompilationEngine:
             return self.compileStatements()
         else:
             return self.compileExpression()
+    
+    def compileTokens(self):
+        count = 0
+        while self.has_more_tokens():
+            self.compileActToken()
+            count += 1
+            if count == 100:
+                return self.vmwriter.vm_comands
+        return self.vmwriter.vm_comands

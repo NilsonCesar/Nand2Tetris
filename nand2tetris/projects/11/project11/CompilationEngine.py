@@ -152,6 +152,15 @@ class CompilationEngine:
             elif self.getCurrentTokenValue() != '[':
                 self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
                 self.advance()
+            elif self.getCurrentTokenValue() == '[':
+                self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
+                self.advance()
+                self.compileExpression()
+                self.vmwriter.writeArithmetic('+')
+                self.advance()
+                self.vmwriter.writePop('pointer', 1)
+                self.vmwriter.writePush('that', 0)
+
             elif self.getCurrentTokenValue() == '.':
                 n = 0
                 self.advance()
@@ -197,8 +206,19 @@ class CompilationEngine:
             self.advance()
             self.compileExpression()
             self.vmwriter.writePop(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
+        else:
+            self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
             self.advance()
-        self.advance()
+            self.compileExpression()
+            self.vmwriter.writeArithmetic('+')
+            self.multAdvance(2)
+            self.compileExpression()
+            self.vmwriter.writePop('temp', 0)
+            self.vmwriter.writePop('pointer', 1)
+            self.vmwriter.writePush('temp', 0)
+            self.vmwriter.writePop('that', 0)
+
+        self.multAdvance(2)
 
     def compileReturn(self):
         self.multAdvance(2)

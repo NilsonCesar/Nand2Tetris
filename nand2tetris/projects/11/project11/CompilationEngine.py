@@ -348,3 +348,12 @@ class CompilationEngine:
         while self.getCurrentTokenType() == 'subroutineDec':
             self.compileSubroutine()
         self.multAdvance(2)
+    
+    def compileActToken(self):
+        token_value = self.get_current_token_value()
+        if token_value == '<class>':
+            return self.compileClass()
+        elif token_value in ['<letStatement>', '<ifStatement>', '<whileStatement>', '<doStatement>', '<returnStatement>']:
+            return self.compileStatements()
+        else:
+            return self.compileExpression()

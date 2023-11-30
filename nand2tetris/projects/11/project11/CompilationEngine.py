@@ -1,4 +1,4 @@
-import JackTokenizer, Parser, SymbolTable, VMWriter
+import JackTokenizer, Parser, SymbolTable, VMWriter, os
 
 class CompilationEngine:
     def __init__(self, program):
@@ -6,6 +6,10 @@ class CompilationEngine:
         tokens = tokens.tokenize()
         analyzer = Parser.Parser(tokens)
         self.tokens = analyzer.compileTokens()
+        with open('/home/nilson/Documentos/Workspace/Nand2Tetris/nand2tetris/projects/11/Seven/Main.j', 'w') as file:
+            for token in self.tokens:
+                file.write(token)
+                file.write('\n')
         self.symbol_table = SymbolTable.SymbolTable()
         self.vmwriter = VMWriter.VMWriter()
         self.act_token = 0
@@ -16,6 +20,7 @@ class CompilationEngine:
         self.void_functions = []
         self.method_functions = []
         self.class_functions = []
+        self.tokens_ate = []
 
     def has_more_tokens(self):
         return self.act_token < len(self.tokens)
@@ -25,14 +30,19 @@ class CompilationEngine:
 
     def advance(self):
         if self.has_more_tokens():
+            self.tokens_ate.append(self.tokens[self.act_token])
             self.act_token += 1
-        return len(self.tokens) - 1
+        return len(self.tokens)
 
     def multAdvance(self, n):
-        self.act_token = self.act_token + n
+        if self.act_token + n < len(self.tokens):
+            self.act_token = self.act_token + n
+        return len(self.tokens)
 
     def getCurrentToken(self):
-        return self.tokens[self.act_token]
+        if self.act_token < len(self.tokens):
+            return self.tokens[self.act_token]
+        return self.tokens[-1]
 
     def getCurrentTokenType(self):
         token = self.getCurrentToken()
@@ -55,20 +65,6 @@ class CompilationEngine:
             cur += 1
         return num
 
-    def createClassVariable(self):
-        kind = self.getCurrentTokenValue()
-        self.advance()
-        if kind == 'field':
-            self.num_fields += 1
-            kind = 'FIELD'
-        if kind == 'static':
-            kind = 'STATIC'
-        type = self.getCurrentTokenValue()
-        self.advance()
-        name = self.getCurrentTokenValue()
-        self.advance()
-        return [name, type, kind]
-
     def createParameterVariable(self):
         kind = 'ARG'
         type = self.getCurrentTokenValue()
@@ -85,12 +81,24 @@ class CompilationEngine:
 
     def compileClassVarDec(self):
         self.advance()
-        variable = self.createClassVariable()
-        self.populeSymbolTable(variable)
+        kind = self.getCurrentTokenValue()
+        self.advance()
+        if kind == 'field':
+            self.num_fields += 1
+            kind = 'FIELD'
+        if kind == 'static':
+            kind = 'STATIC'
+        type = self.getCurrentTokenValue()
+        self.advance()
+        name = self.getCurrentTokenValue()
+        self.advance()
+        self.populeSymbolTable([name, type, kind])
+        
         while self.getCurrentTokenValue() != ';':
             self.advance()
-            variable = self.createClassVariable()
-            self.populeSymbolTable(variable)
+            name = self.getCurrentTokenValue()
+            self.advance()
+            self.populeSymbolTable([name, type, kind])
         self.multAdvance(2)
 
     def compileParameterList(self):
@@ -112,7 +120,7 @@ class CompilationEngine:
             self.advance()
             variable = self.createVarVariable(type)
             self.populeSymbolTable(variable)
-        self.multAdvance(2)
+        self.multAdvance(3)
 
     def compileExpression(self):
         self.advance()
@@ -159,7 +167,7 @@ class CompilationEngine:
                 self.advance()
                 subroutineName = self.getCurrentTokenValue()
                 self.multAdvance(2)
-                if name in self.method_functions():
+                if name in self.method_functions:
                     n = 1
                     self.vmwriter.push('pointer', 0)
                 n += self.compileExpressionList()
@@ -178,7 +186,6 @@ class CompilationEngine:
                 self.advance()
                 self.vmwriter.writePop('pointer', 1)
                 self.vmwriter.writePush('that', 0)
-
         elif tokenType == 'symbol':
             if self.getCurrentTokenValue == '(':
                 self.advance()
@@ -201,6 +208,8 @@ class CompilationEngine:
             elif value == 'this':
                 self.vmwriter.writePush('pointer', 0)
                 self.advance()
+        else:
+            self.advance()
 
         if(not inDo):
             self.advance()
@@ -338,7 +347,7 @@ class CompilationEngine:
         self.advance()
         self.compileParameterList()
         self.advance()
-        self.compileSubroutineBody(routineType, routineName)
+        self.compileSubroutineBody(routineType)
         self.advance()
 
     def compileClass(self):
@@ -355,7 +364,7 @@ class CompilationEngine:
         self.multAdvance(2)
     
     def compileActToken(self):
-        token_value = self.get_current_token_value()
+        token_value = self.getCurrentToken()
         if token_value == '<class>':
             return self.compileClass()
         elif token_value in ['<letStatement>', '<ifStatement>', '<whileStatement>', '<doStatement>', '<returnStatement>']:
@@ -364,10 +373,6 @@ class CompilationEngine:
             return self.compileExpression()
     
     def compileTokens(self):
-        count = 0
         while self.has_more_tokens():
             self.compileActToken()
-            count += 1
-            if count == 100:
-                return self.vmwriter.vm_comands
         return self.vmwriter.vm_comands

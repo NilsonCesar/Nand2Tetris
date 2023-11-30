@@ -10,7 +10,8 @@ class JackCompiler:
         return vm_output
 
 def compileProgram(file_path):
-    compiler = JackCompiler(file_path)
+    program = open(file_path).readlines()
+    compiler = JackCompiler(program)
     vm_instructions = compiler.compile()
     dest = file_path[:-4] + 'vm'
     
@@ -19,7 +20,7 @@ def compileProgram(file_path):
             file.write(instruction)
             file.write('\n')
 
-if __name__ == 'main':
+if __name__ == '__main__':
     path = sys.argv[1]
 
     if len(path) >= 4 and path[-4:] == 'jack':

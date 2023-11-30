@@ -18,7 +18,8 @@ class Parser():
         return self.get_element_type(self.get_current_token())
 
     def make_space(self, sps, exp):
-        return [str(exp)]
+        sps = 0
+        return ['  ' * sps + str(exp)]
     
     def eat(self, sps):
         exp = self.make_space(sps, self.get_current_token())
@@ -233,5 +234,8 @@ class Parser():
     def compileTokens(self):
         self.compiled_tokens = []
         while self.has_more_tokens():
-            self.compiled_tokens += self.compileActToken()
+            try:
+                self.compiled_tokens += self.compileActToken()
+            except:
+                print(self.compiled_tokens)
         return self.compiled_tokens

@@ -236,7 +236,7 @@ class CompilationEngine:
 
     def compileReturn(self):
         self.multAdvance(2)
-        if self.getCurrentTokenValue == ';':
+        if self.getCurrentTokenValue() == ';':
             self.vmwriter.writePush('constant', 0)
         else:
             self.compileExpression()
@@ -246,9 +246,7 @@ class CompilationEngine:
     def compileDo(self):
         self.multAdvance(2)
         self.compileTerm(True)
-        while self.getCurrentTokenValue != '/doStatement':
-            self.advance()
-        self.advance()
+        self.multAdvance(2)
 
     def compileIf(self):
         l1 = self.label_num

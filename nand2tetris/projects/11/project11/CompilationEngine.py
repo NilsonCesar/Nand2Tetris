@@ -161,23 +161,17 @@ class CompilationEngine:
                 self.advance()
                 subroutineName = self.getCurrentTokenValue()
                 self.multAdvance(2)
-                if name in self.method_functions:
-                    n = 1
-                    self.vmwriter.push('pointer', 0)
                 n += self.compileExpressionList()
-                self.vmwriter.writeCall(f'{name}.{subroutineName}', n)
-                if name in self.void_functions or name[0].isupper():
-                    self.vmwriter.writePop('temp', 0)
                 self.advance()
+                self.vmwriter.writeCall(f'{name}.{subroutineName}', n)
             elif self.getCurrentTokenValue() != '[':
                 self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
-                self.advance()
             elif self.getCurrentTokenValue() == '[':
                 self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
                 self.advance()
                 self.compileExpression()
-                self.vmwriter.writeArithmetic('+')
                 self.advance()
+                self.vmwriter.writeArithmetic('+')
                 self.vmwriter.writePop('pointer', 1)
         elif tokenType == 'symbol':
             if self.getCurrentTokenValue() == '(':
@@ -247,33 +241,35 @@ class CompilationEngine:
         self.label_num += 2
         self.multAdvance(3)
         self.compileExpression()
-        self.vmwriter.writeArithmetic('-', True)
-        self.vmwriter.writeIf(f'${self.label_name + l1}')
+        self.vmwriter.writePush('constant', 0)
+        self.vmwriter.writeArithmetic('=')
+        self.vmwriter.writeIf(f'${self.label_name}{l1}')
         self.multAdvance(2)
         self.compileStatements()
-        self.vmwriter.writeGoto(f'${self.label_name + l2}')
+        self.vmwriter.writeGoto(f'${self.label_name}{l2}')
         self.advance()
-        self.vmwriter.writeLabel(f'${self.label_name + l1}')
+        self.vmwriter.writeLabel(f'${self.label_name}{l1}')
         if self.getCurrentTokenValue == 'else':
             self.multAdvance(2)
             self.compileStatements()
             self.multAdvance(2)
-        self.vmwriter.writeLabel(f'${self.label_name + l2}')
+        self.vmwriter.writeLabel(f'${self.label_name}{l2}')
 
     def compileWhile(self):
         l1 = self.label_num
         l2 = self.label_num + 1
         self.label_num += 2
-        self.vmwriter.writeLabel(f'${self.label_name + l1}')
+        self.vmwriter.writeLabel(f'${self.label_name}{l1}')
         self.multAdvance(3)
         self.compileExpression()
-        self.vmwriter.writeArithmetic('-', True)
-        self.vmwriter.writeIf(f'${self.label_name + l2}')
+        self.vmwriter.writePush('constant', 0)
+        self.vmwriter.writeArithmetic('=')
+        self.vmwriter.writeIf(f'${self.label_name}{l2}')
         self.multAdvance(2)
         self.compileStatements()
         self.multAdvance(2)
-        self.vmwriter.writeGoto(f'${self.label_name + l1}')
-        self.vmwriter.writeLabel(f'${self.label_name + l2}')
+        self.vmwriter.writeGoto(f'${self.label_name}{l1}')
+        self.vmwriter.writeLabel(f'${self.label_name}{l2}')
     
     def compileStatements(self):
         self.advance()
@@ -297,14 +293,14 @@ class CompilationEngine:
         while self.getCurrentTokenType() != '/expressionList':
             n += 1
             self.compileExpression()
-            if self.getCurrentTokenValue == ',':
+            if self.getCurrentTokenValue() == ',':
                 self.advance()
         self.advance()
         return n
     
     def compileSubroutineBody(self, routineType):
         self.multAdvance(2)
-        while self.getCurrentTokenType == 'varDec':
+        while self.getCurrentTokenType() == 'varDec':
             self.compileVarDec()
 
         if routineType == 'constructor':

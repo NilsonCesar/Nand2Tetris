@@ -152,15 +152,10 @@ class CompilationEngine:
             self.advance()
             if self.getCurrentTokenValue() == '(':
                 n = 0
-                if name in self.method_functions:
-                    n = 1
-                    self.vmwriter.writePush('pointer', 0)
                 self.advance()
                 n += self.compileExpressionList()
                 self.advance()
                 self.vmwriter.writeCall(self.name_file + '.' + name, n)
-                if name in self.void_functions:
-                    self.vmwriter.writePop('temp', 0)
             elif self.getCurrentTokenValue() == '.':
                 n = 0
                 self.advance()

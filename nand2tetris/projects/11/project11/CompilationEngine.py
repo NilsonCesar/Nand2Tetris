@@ -232,7 +232,6 @@ class CompilationEngine:
             self.vmwriter.writePop('pointer', 1)
             self.vmwriter.writePush('temp', 0)
             self.vmwriter.writePop('that', 0)
-
         self.multAdvance(2)
 
     def compileReturn(self):
@@ -267,7 +266,7 @@ class CompilationEngine:
         if self.getCurrentTokenValue == 'else':
             self.multAdvance(2)
             self.compileStatements()
-            self.advance()
+            self.multAdvance(2)
         self.vmwriter.writeLabel(f'${self.label_name + l2}')
 
     def compileWhile(self):

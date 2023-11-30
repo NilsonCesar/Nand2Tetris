@@ -120,7 +120,7 @@ class CompilationEngine:
             self.advance()
             variable = self.createVarVariable(type)
             self.populeSymbolTable(variable)
-        self.multAdvance(3)
+        self.multAdvance(2)
 
     def compileExpression(self):
         self.advance()

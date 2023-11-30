@@ -6,7 +6,7 @@ class CompilationEngine:
         tokens = tokens.tokenize()
         analyzer = Parser.Parser(tokens)
         self.tokens = analyzer.compileTokens()
-        with open('/home/nilson/Documentos/Workspace/Nand2Tetris/nand2tetris/projects/11/Seven/Main.j', 'w') as file:
+        with open('/home/nilson/Documentos/Workspace/Nand2Tetris/nand2tetris/projects/11/Seven/Main.tokens', 'w') as file:
             for token in self.tokens:
                 file.write(token)
                 file.write('\n')
@@ -20,7 +20,7 @@ class CompilationEngine:
         self.void_functions = []
         self.method_functions = []
         self.class_functions = []
-        self.tokens_ate = []
+
 
     def has_more_tokens(self):
         return self.act_token < len(self.tokens)
@@ -30,7 +30,6 @@ class CompilationEngine:
 
     def advance(self):
         if self.has_more_tokens():
-            self.tokens_ate.append(self.tokens[self.act_token])
             self.act_token += 1
         return len(self.tokens)
 
@@ -172,7 +171,7 @@ class CompilationEngine:
                     self.vmwriter.push('pointer', 0)
                 n += self.compileExpressionList()
                 self.vmwriter.writeCall(f'{name}.{subroutineName}', n)
-                if name in self.void_functions:
+                if name in self.void_functions or name[0].isupper():
                     self.vmwriter.writePop('temp', 0)
                 self.advance()
             elif self.getCurrentTokenValue() != '[':
@@ -185,9 +184,8 @@ class CompilationEngine:
                 self.vmwriter.writeArithmetic('+')
                 self.advance()
                 self.vmwriter.writePop('pointer', 1)
-                self.vmwriter.writePush('that', 0)
         elif tokenType == 'symbol':
-            if self.getCurrentTokenValue == '(':
+            if self.getCurrentTokenValue() == '(':
                 self.advance()
                 self.compileExpression()
                 self.advance()
@@ -195,7 +193,7 @@ class CompilationEngine:
                 op = self.getCurrentTokenValue()
                 self.advance()
                 self.compileTerm()
-                self.vmwriter.writeArithmetic(op)
+                self.vmwriter.writeArithmetic(op, True)
         elif tokenType == 'keyword':
             value = self.getCurrentTokenValue()
             if value == 'true':
@@ -301,7 +299,7 @@ class CompilationEngine:
     def compileExpressionList(self):
         n = 0
         self.advance()
-        while self.getCurrentTokenType != '/expressionList':
+        while self.getCurrentTokenType() != '/expressionList':
             n += 1
             self.compileExpression()
             if self.getCurrentTokenValue == ',':
@@ -359,7 +357,7 @@ class CompilationEngine:
         while self.getCurrentTokenType() == 'subroutineDec':
             self.compileSubroutine()
         self.multAdvance(2)
-    
+
     def compileActToken(self):
         token_value = self.getCurrentToken()
         if token_value == '<class>':
@@ -370,6 +368,5 @@ class CompilationEngine:
             return self.compileExpression()
     
     def compileTokens(self):
-        while self.has_more_tokens():
-            self.compileActToken()
+        self.compileClass()
         return self.vmwriter.vm_comands

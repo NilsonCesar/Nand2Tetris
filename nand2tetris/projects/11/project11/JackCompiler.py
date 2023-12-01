@@ -32,6 +32,7 @@ class JackCompiler:
         return signature in self.void or signature in JackCompiler.VOID_OS_FUNCTIONS
     
     def checkCrossCall(self):
+        v = 0
         for vm_code in self.vm_codes:
             for i in range(len(vm_code)):
                 if self.isCall(vm_code[i]):
@@ -42,6 +43,8 @@ class JackCompiler:
                         vm_code = vm_code[:i - n] + ['push pointer 0'] + vm_code[i - n:]
                     if self.isVoid(call_pieces[1]):
                         vm_code = vm_code[:i + 1] + ['pop temp 0'] + vm_code[i + 1:]
+            self.vm_codes[v] = vm_code
+            v += 1
 
 
     def writeProgram(self, vm_instructions, dest):

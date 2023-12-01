@@ -45,6 +45,7 @@ push local 1
 add
 push constant 1
 call Memory.poke 2
+pop temp 0
 goto $Main6
 label $Main5
 push constant 8000
@@ -52,6 +53,7 @@ push local 1
 add
 push constant 0
 call Memory.poke 2
+pop temp 0
 label $Main6
 goto $Main4
 label $Main3
@@ -87,6 +89,7 @@ if-goto $Main10
 push argument 0
 push argument 2
 call Memory.poke 2
+pop temp 0
 push argument 1
 push constant 1
 sub

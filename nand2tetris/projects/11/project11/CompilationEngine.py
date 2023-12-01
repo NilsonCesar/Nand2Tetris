@@ -248,7 +248,7 @@ class CompilationEngine:
         self.label_num += 2
         self.multAdvance(3)
         self.compileExpression()
-        self.vmwriter.writeArithmetic('-', True)
+        self.vmwriter.writeArithmetic('~')
         self.vmwriter.writeIf(f'${self.label_name}{l1}')
         self.multAdvance(2)
         self.compileStatements()
@@ -270,7 +270,7 @@ class CompilationEngine:
         self.vmwriter.writeLabel(f'${self.label_name}{l1}')
         self.multAdvance(3)
         self.compileExpression()
-        self.vmwriter.writeArithmetic('-', True)
+        self.vmwriter.writeArithmetic('~')
         self.vmwriter.writeIf(f'${self.label_name}{l2}')
         self.multAdvance(2)
         self.compileStatements()

@@ -252,8 +252,8 @@ class CompilationEngine:
         self.vmwriter.writeIf(f'${self.label_name}{l1}')
         self.multAdvance(2)
         self.compileStatements()
-        self.vmwriter.writeGoto(f'${self.label_name}{l2}')
         self.advance()
+        self.vmwriter.writeGoto(f'${self.label_name}{l2}')
         self.vmwriter.writeLabel(f'${self.label_name}{l1}')
         if self.getCurrentTokenValue() == 'else':
             self.multAdvance(2)

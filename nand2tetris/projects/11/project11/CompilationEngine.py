@@ -255,10 +255,12 @@ class CompilationEngine:
         self.vmwriter.writeGoto(f'${self.label_name}{l2}')
         self.advance()
         self.vmwriter.writeLabel(f'${self.label_name}{l1}')
-        if self.getCurrentTokenValue == 'else':
+        if self.getCurrentTokenValue() == 'else':
             self.multAdvance(2)
             self.compileStatements()
             self.multAdvance(2)
+        else:
+            self.advance()
         self.vmwriter.writeLabel(f'${self.label_name}{l2}')
 
     def compileWhile(self):

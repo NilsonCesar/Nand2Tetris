@@ -305,7 +305,7 @@ class CompilationEngine:
         self.advance()
         return n
     
-    def compileSubroutineBody(self, routineType):
+    def compileSubroutineBody(self, routineType, routineName = ''):
         self.multAdvance(2)
         while self.getCurrentTokenType() == 'varDec':
             self.compileVarDec()
@@ -318,7 +318,7 @@ class CompilationEngine:
             self.vmwriter.writePush('argument', 0)
             self.vmwriter.writePop('pointer', 0)
         if routineType == 'function':
-            self.class_functions.append(routineType)
+            self.class_functions.append(self.label_name + '.' + routineName)
         self.compileStatements()
         self.multAdvance(2)
 
@@ -332,15 +332,15 @@ class CompilationEngine:
         routineName = self.getCurrentTokenValue()
         self.advance()
         if routineType == 'method':
-            self.method_functions.append(routineName)
+            self.method_functions.append(self.label_name + '.' + routineName)
         if routineKind == 'void':
-            self.void_functions.append(routineName)
+            self.void_functions.append(self.label_name + '.' + routineName)
         n = self.getNumberOfVarDec()
         self.vmwriter.writeFunction(self.name_file + '.' + routineName, n)
         self.advance()
         self.compileParameterList()
         self.advance()
-        self.compileSubroutineBody(routineType)
+        self.compileSubroutineBody(routineType, routineName)
         self.advance()
 
     def compileClass(self):

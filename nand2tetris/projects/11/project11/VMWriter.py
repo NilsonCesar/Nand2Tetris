@@ -13,7 +13,7 @@ class VMWriter:
             self.vm_comands += ['add']
         if command == '-':
             if unary:
-                self.vm_comands += ['neg']
+                self.vm_comands += ['not']
             else:
                 self.vm_comands += ['sub']
         if command == '*':

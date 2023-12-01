@@ -57,10 +57,16 @@ class CompilationEngine:
     
     def getNumberOfVarDec(self):
         num = 0
+        inVarDec = False
         cur = self.act_token
         while self.tokens[cur] != '<statements>':
             if self.tokens[cur] == '<varDec>':
                 num += 1
+                inVarDec = True
+            if self.tokens[cur] == '<symbol> , </symbol>' and inVarDec:
+                num += 1
+            if self.tokens[cur] == '</varDec>':
+                inVarDec = False
             cur += 1
         return num
 
@@ -173,6 +179,7 @@ class CompilationEngine:
                 self.advance()
                 self.vmwriter.writeArithmetic('+')
                 self.vmwriter.writePop('pointer', 1)
+                self.vmwriter.writePush('that', 0)
         elif tokenType == 'symbol':
             if self.getCurrentTokenValue() == '(':
                 self.advance()
@@ -212,8 +219,8 @@ class CompilationEngine:
             self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
             self.advance()
             self.compileExpression()
-            self.vmwriter.writeArithmetic('+')
             self.multAdvance(2)
+            self.vmwriter.writeArithmetic('+')
             self.compileExpression()
             self.vmwriter.writePop('temp', 0)
             self.vmwriter.writePop('pointer', 1)
@@ -241,8 +248,7 @@ class CompilationEngine:
         self.label_num += 2
         self.multAdvance(3)
         self.compileExpression()
-        self.vmwriter.writePush('constant', 0)
-        self.vmwriter.writeArithmetic('=')
+        self.vmwriter.writeArithmetic('-', True)
         self.vmwriter.writeIf(f'${self.label_name}{l1}')
         self.multAdvance(2)
         self.compileStatements()
@@ -262,8 +268,7 @@ class CompilationEngine:
         self.vmwriter.writeLabel(f'${self.label_name}{l1}')
         self.multAdvance(3)
         self.compileExpression()
-        self.vmwriter.writePush('constant', 0)
-        self.vmwriter.writeArithmetic('=')
+        self.vmwriter.writeArithmetic('-', True)
         self.vmwriter.writeIf(f'${self.label_name}{l2}')
         self.multAdvance(2)
         self.compileStatements()

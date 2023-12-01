@@ -23,7 +23,7 @@ class JackCompiler:
                 self.writeProgram(self.vm_codes[i], self.dests[i])
     
     def isCall(self, instruction):
-        return len(instruction) > 4 and instruction[-4:] == 'call'
+        return len(instruction) > 4 and instruction[:4] == 'call'
 
     def isMethod(self, signature):
         return signature in self.methods

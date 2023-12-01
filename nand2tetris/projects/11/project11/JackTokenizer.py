@@ -108,7 +108,7 @@ class JackTokenizer:
             while i < len(line) and not (self.isInReservedWords(line[i]) or line[i] == ' '):
                 word += line[i]
                 i += 1
-                if self.isInReservedWords(word):
+                if self.isInReservedWords(word) and line[i] == ' ':
                     break
 
             tokens.append(self.make_token(word))

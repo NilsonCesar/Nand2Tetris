@@ -64,8 +64,8 @@ if __name__ == '__main__':
         jackFiles = []
 
         for file in files:
-            if len(file) >= 4 and file[-4:] == 'jack':
+            if len(file.path) >= 4 and file.path[-4:] == 'jack':
                 jackFiles.append(file.path)
         
         for i in range(len(jackFiles)):
-            jackCompiler.compile(jackFiles, i == len(jackFiles) - 1)
+            jackCompiler.compile(jackFiles[i], i == len(jackFiles) - 1)

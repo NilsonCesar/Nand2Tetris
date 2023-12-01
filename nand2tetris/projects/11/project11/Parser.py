@@ -237,5 +237,5 @@ class Parser():
             try:
                 self.compiled_tokens += self.compileActToken()
             except:
-                print(self.compiled_tokens)
+                print('hi')
         return self.compiled_tokens

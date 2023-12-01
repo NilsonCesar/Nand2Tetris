@@ -193,8 +193,8 @@ class CompilationEngine:
         elif tokenType == 'keyword':
             value = self.getCurrentTokenValue()
             if value == 'true':
-                self.vmwriter.writePush('constant', 1)
-                self.vmwriter.writeArithmetic('-', True)
+                self.vmwriter.writePush('constant', 0)
+                self.vmwriter.writeArithmetic('~', True)
                 self.advance()
             elif value in ['false', 'null']:
                 self.vmwriter.writePush('constant', 0)

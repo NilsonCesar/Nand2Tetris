@@ -6,10 +6,6 @@ class CompilationEngine:
         tokens = tokens.tokenize()
         analyzer = Parser.Parser(tokens)
         self.tokens = analyzer.compileTokens()
-        with open('/home/nilson/Documentos/Workspace/Nand2Tetris/nand2tetris/projects/11/Seven/Main.tokens', 'w') as file:
-            for token in self.tokens:
-                file.write(token)
-                file.write('\n')
         self.symbol_table = SymbolTable.SymbolTable()
         self.vmwriter = VMWriter.VMWriter()
         self.act_token = 0

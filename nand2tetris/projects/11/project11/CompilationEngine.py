@@ -103,6 +103,8 @@ class CompilationEngine:
             self.advance()
             name = self.getCurrentTokenValue()
             self.advance()
+            if kind == 'FIELD':
+                self.num_fields += 1
             self.populeSymbolTable([name, type, kind])
         self.multAdvance(2)
 
@@ -158,18 +160,26 @@ class CompilationEngine:
             self.advance()
             if self.getCurrentTokenValue() == '(':
                 n = 0
+                self.vmwriter.writePush('pointer', 0)
                 self.advance()
                 n += self.compileExpressionList()
                 self.advance()
-                self.vmwriter.writeCall(self.name_file + '.' + name, n)
+                self.vmwriter.writeCall(self.name_file + '.' + name, 1 + n)
             elif self.getCurrentTokenValue() == '.':
                 n = 0
                 self.advance()
+                is_call = self.tokens[self.act_token + 1] == '<symbol> ( </symbol>'
+                if is_call and self.symbol_table.typeOf(name) != 'NONE':
+                    n = 1
+                    self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
                 subroutineName = self.getCurrentTokenValue()
                 self.multAdvance(2)
                 n += self.compileExpressionList()
                 self.advance()
-                self.vmwriter.writeCall(f'{name}.{subroutineName}', n)
+                if is_call and self.symbol_table.typeOf(name) != 'NONE':
+                    self.vmwriter.writeCall(f'{self.symbol_table.typeOf(name)}.{subroutineName}', n)
+                else:
+                    self.vmwriter.writeCall(f'{name}.{subroutineName}', n)
             elif self.getCurrentTokenValue() != '[':
                 self.vmwriter.writePush(self.symbol_table.kindOf(name), self.symbol_table.indexOf(name))
             elif self.getCurrentTokenValue() == '[':

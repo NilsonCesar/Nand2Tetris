@@ -31,6 +31,16 @@ class Math {
         twoToThe[15] = ~32767;
     }
 
+    function boolean bit(int x, int i) {
+        var boolean isOn;
+        let isOn = x & twoToThe[i];
+        if (isOn = 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     /** Returns the absolute value of x. */
     function int abs(int x) {
         if (x > 0) {

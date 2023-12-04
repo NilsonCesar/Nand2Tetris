@@ -29,10 +29,11 @@ class Math {
         let twoToThe[13] = 8192;
         let twoToThe[14] = 16384;
         let twoToThe[15] = ~32767;
+        return;
     }
 
     function boolean bit(int x, int i) {
-        var boolean isOn;
+        var int isOn;
         let isOn = x & twoToThe[i];
         if (isOn = 0) {
             return false;
@@ -47,7 +48,7 @@ class Math {
             return x;
         }
         
-        return multiply(-1, x);
+        return Math.multiply(-1, x);
     }
 
     /** Returns the product of x and y. 
@@ -60,7 +61,7 @@ class Math {
         let i = 0;
         let shiftedX = x;
         while(i < 16) {
-            if(bit(y, i)) {
+            if(Math.bit(y, i)) {
                 let sum = sum + shiftedX;
             }
             let shiftedX = shiftedX + shiftedX;
@@ -86,10 +87,10 @@ class Math {
             let negativeY = true;
         }
         let negative = (negativeX | negativeY) & (~(negativeX & negativeY));
-        let result = divideWithoutSign(abs(x), abs(y));
+        let result = Math.divideWithoutSign(Math.abs(x), Math.abs(y));
 
         if (negative) {
-            return multiply(result, -1); 
+            return Math.multiply(result, -1); 
         } 
 
         return result;
@@ -100,11 +101,11 @@ class Math {
         if((y > x) | (y < 0)) {
             return 0;
         }
-        let q = divideWithoutSign(x, multiply(y, 2));
-        if(x - (multiply(2, multiply(q, y))) < y) {
-            return multiply(2, q);
+        let q = Math.divideWithoutSign(x, Math.multiply(y, 2));
+        if(x - (Math.multiply(2, Math.multiply(q, y))) < y) {
+            return Math.multiply(2, q);
         } else {
-            return multiply(2, q) + 1;
+            return Math.multiply(2, q) + 1;
         }
     }
 
@@ -115,7 +116,7 @@ class Math {
         let j = 15;
         while ((j > 0) | (j = 0)) {
             let sum = y + twoToThe[j];
-            let power = multiply(sum, sum);
+            let power = Math.multiply(sum, sum);
             if(((power < x) | (power = x)) & (power > 0)) {
                 let y = sum;
             }

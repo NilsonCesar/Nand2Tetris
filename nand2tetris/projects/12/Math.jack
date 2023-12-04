@@ -8,10 +8,12 @@
  * Note: Jack compilers implement multiplication and division using OS method calls.
  */
 class Math {
-    static Array 
+    static Array x, y;
 
     /** Initializes the library. */
     function void init() {
+        let x = Array.new(16);
+        let y = Array.new(16);
     }
 
     /** Returns the absolute value of x. */

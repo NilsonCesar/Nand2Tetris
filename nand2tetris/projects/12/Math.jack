@@ -46,6 +46,7 @@ class Math {
         if (x > 0) {
             return x;
         }
+        
         return multiply(-1, x);
     }
 
@@ -90,6 +91,7 @@ class Math {
         if (negative) {
             return multiply(result, -1); 
         } 
+
         return result;
     }
 
@@ -108,6 +110,19 @@ class Math {
 
     /** Returns the integer part of the square root of x. */
     function int sqrt(int x) {
+        var int y, power, sum,j;
+        let y = 0;
+        let j = 15;
+        while ((j > 0) | (j = 0)) {
+            let sum = y + twoToThe[j];
+            let power = multiply(sum, sum);
+            if(((power < x) | (power = x)) & (power > 0)) {
+                let y = sum;
+            }
+            let j = j - 1;
+        }
+
+        return y;
     }
 
     /** Returns the greater number. */
@@ -115,6 +130,7 @@ class Math {
         if (a > b) {
             return a;
         }
+
         return b;
     }
 
@@ -123,6 +139,7 @@ class Math {
         if (a > b) {
             return b;
         }
+
         return a;
     }
 }

@@ -85,16 +85,20 @@ class Math {
             let negativeY = true;
         }
         let negative = (negativeX | negativeY) & (~(negativeX & negativeY));
-        let result = divideWithSign(abs(x), abs(y), negative);
-        return result; 
+        let result = divideWithoutSign(abs(x), abs(y));
+
+        if (negative) {
+            return multiply(result, -1); 
+        } 
+        return result;
     }
 
-    function int divideWithSign(int x, int y, boolean sign) {
+    function int divideWithoutSign(int x, int y) {
         var int q;
         if((y > x) | (y < 0)) {
             return 0;
         }
-        let q = divideWithSign(x, multiply(y, 2), sign);
+        let q = divideWithoutSign(x, multiply(y, 2));
         if(x - (multiply(2, multiply(q, y))) < y) {
             return multiply(2, q);
         } else {

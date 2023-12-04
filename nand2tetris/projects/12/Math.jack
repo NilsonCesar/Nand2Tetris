@@ -65,7 +65,7 @@ class Math {
             let shiftedX = shiftedX + shiftedX;
             let i = i + 1;
         }
-        
+
         return sum;
     }
 
@@ -75,6 +75,31 @@ class Math {
      *  the Jack expressions x/y and divide(x,y) return the same value.
      */
     function int divide(int x, int y) {
+        var boolean negativeX, negativeY, negative, result;
+        let negativeX = false;
+        let negativeY = false;
+        if(x < 0) {
+            let negativeX = true;
+        }
+        if(y < 0) {
+            let negativeY = true;
+        }
+        let negative = (negativeX | negativeY) & (~(negativeX & negativeY));
+        let result = divideWithSign(abs(x), abs(y), negative);
+        return result; 
+    }
+
+    function int divideWithSign(int x, int y, boolean sign) {
+        var int q;
+        if((y > x) | (y < 0)) {
+            return 0;
+        }
+        let q = divideWithSign(x, multiply(y, 2), sign);
+        if(x - (multiply(2, multiply(q, y))) < y) {
+            return multiply(2, q);
+        } else {
+            return multiply(2, q) + 1;
+        }
     }
 
     /** Returns the integer part of the square root of x. */

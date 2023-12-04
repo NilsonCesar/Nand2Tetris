@@ -8,6 +8,7 @@
  * Note: Jack compilers implement multiplication and division using OS method calls.
  */
 class Math {
+    static Array 
 
     /** Initializes the library. */
     function void init() {
@@ -18,7 +19,7 @@ class Math {
         if (x > 0) {
             return x;
         }
-        return -1 * x;
+        return multiply(-1, x);
     }
 
     /** Returns the product of x and y. 

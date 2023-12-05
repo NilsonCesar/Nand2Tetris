@@ -36,7 +36,7 @@ class Screen {
         var int address, value, remainder;
         var boolean in;
         let address = Math.multiply(y, 32) + Math.divide(x, 16);
-        let value = Memory.peek(address);
+        let value = Memory.peek(address + 16384);
         let remainder = x - (Math.divide(x, 16) * 16);
         let in = Math.bit(x, remainder);
         if (in & ~(color = 1)) {

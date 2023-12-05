@@ -52,23 +52,79 @@ class Screen {
 
     /** Draws a line from pixel (x1,y1) to pixel (x2,y2), using the current color. */
     function void drawLine(int x1, int y1, int x2, int y2) {
-        var int a, b, diff, dx, dy;
+        var int a, b, diff, dx, dy, tmp;
         let a = 0;
         let b = 0;
         let diff = 0;
         let dx = x2 - x1;
         let dy = y2 - y1;
 
-        while(((a < dx) | (a = dx)) & ((b < dy) | (b = dy))) {
-            do Screen.drawPixel(x1 + a, y1 + b);
-            if (diff < 0) {
-                let a = a + 1;
-                let diff = diff + dy;
-            } else {
+        if((x1 = x2)) {
+            let tmp = Math.min(y1, y2);
+            let y2 = Math.max(y1, y2);
+            let y1 = tmp;
+
+            while(((b + y1) < y2) | ((b + y1) = y2)) {
+                do Screen.drawPixel(x1, y1 + b);
                 let b = b + 1;
-                let diff = diff - dx;
+            }
+            return;
+        }
+
+        if(y1 = y2) {
+            let tmp = Math.min(x1, x2);
+            let x2 = Math.max(x1, x2);
+            let x1 = tmp;
+            while(((a + x1) < x2) | ((a + x1) = x2)) {
+                do Screen.drawPixel(x1 + a, y1);
+                let a = a + 1;
+            }
+            return;
+        }
+
+        if((x2 < x1) & (y2 < y1)) {
+            let tmp = x1;
+            let x1 = x2;
+            let x2 = tmp;
+            let tmp = y1;
+            let y1 = y2;
+            let y2 = tmp;
+        }
+
+        if((x1 < x2) & (y1 < y2)) {
+            while(((a < dx) | (a = dx)) & ((b < dy) | (b = dy))) {
+                do Screen.drawPixel(x1 + a, y1 + b);
+                if (diff < 0) {
+                    let a = a + 1;
+                    let diff = diff + dy;
+                } else {
+                    let b = b + 1;
+                    let diff = diff - dx;
+                }
+            }
+            return;
+        }
+
+        if((x1 > x2) & (y2 > y1)) {
+            let tmp = x1;
+            let x1 = x2;
+            let x2 = tmp;
+            let tmp = y1;
+            let y1 = y2;
+            let y2 = tmp;
+        }
+
+        while(((a < dx) | (a = dx)) & ((b > dy) | (b = dy))) {
+            do Screen.drawPixel(x1 + a, y1 + b);
+            if(diff < 0) {
+                let b = b - 1;
+                let diff = diff + dx;
+            } else {
+                let a = a + 1;
+                let diff = diff - dy;
             }
         }
+
 
         return;
     }
@@ -80,6 +136,7 @@ class Screen {
 
     /** Draws a filled circle of radius r<=181 around (x,y), using the current color. */
     function void drawCircle(int x, int y, int r) {
+        let r = Math.min(r, 181);
         var int dy, dx;
         let dy = -r;
         while(dy < r) {

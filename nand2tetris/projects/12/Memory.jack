@@ -20,6 +20,7 @@ class Memory {
         let freeList[0] = 0;
         let freeListLastLink = 0;
         let freeList[1] = 14335;
+        return;
     }
 
     /** Returns the RAM value at the given address. */
@@ -42,7 +43,7 @@ class Memory {
         let freeListPointer = freeList;
         let freeListAmount = freeList[1];
         while(~(freeListPointer = 0)) {
-            if(freeListPointer[1] > size + 1) {
+            if(freeListPointer[1] > (size + 1)) {
                 let nextLinkedList = freeListPointer[0];
                 let freeListPointer[0] = 0;
                 let freeListPointer[1] = size;
@@ -74,6 +75,6 @@ class Memory {
             let ram[freeListLastLink - 2] = o - 2;
             let freeListLastLink = o;
         }
-        return 0;
+        return;
     }    
 }

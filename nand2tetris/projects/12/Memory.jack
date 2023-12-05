@@ -67,5 +67,13 @@ class Memory {
     /** De-allocates the given object (cast as an array) by making
      *  it available for future allocations. */
     function void deAlloc(Array o) {
+        if(freeListLastLink = 0) {
+            let freeListLastLink = o;
+            let freeList[0] = o - 2;
+        } else {
+            let ram[freeListLastLink - 2] = o - 2;
+            let freeListLastLink = o;
+        }
+        return 0;
     }    
 }

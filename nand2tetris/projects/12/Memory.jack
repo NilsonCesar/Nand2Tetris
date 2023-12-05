@@ -9,14 +9,17 @@
  * consists of 32,768 words, each holding a 16-bit binary number.
  */ 
 class Memory {
-    static Array ram, heap;
+    static Array ram, heap, freeList;
+    static int freeListLastLink;
 
     /** Initializes the class. */
     function void init() {
         let ram = 0;
         let heap = 2048;
-        let heap[0] = 0;
-        let heap[1] = 14335;
+        let freeList = heap;
+        let freeList[0] = 0;
+        let freeListLastLink = 0;
+        let freeList[1] = 14335;
     }
 
     /** Returns the RAM value at the given address. */
@@ -33,6 +36,32 @@ class Memory {
     /** Finds an available RAM block of the given size and returns
      *  a reference to its base address. */
     function int alloc(int size) {
+        var int block, freeListPointer, freeListAmount, nextLinkedList;
+        var boolean allocated;
+        let allocated = false;
+        let freeListPointer = freeList;
+        let freeListAmount = freeList[1];
+        while(~(freeListPointer = 0)) {
+            if(freeListPointer[1] > size + 1) {
+                let nextLinkedList = freeListPointer[0];
+                let freeListPointer[0] = 0;
+                let freeListPointer[1] = size;
+                let block = freeListPointer + 2;
+                let freeList = freeList + size + 2;
+                let freeList[0] = nextLinkedList;
+                let freeList[1] = freeListAmount - size - 2;
+                let freeListPointer = 0;
+                let allocated = true;
+            } else {
+                let freeListPointer = freeList[0];
+            }
+        }
+
+        if(allocated) {
+            return block;
+        } else {
+            return -1;
+        }
     }
 
     /** De-allocates the given object (cast as an array) by making

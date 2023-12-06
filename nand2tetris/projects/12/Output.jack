@@ -215,6 +215,23 @@ class Output {
     /** Displays the given integer starting at the cursor location,
      *  and advances the cursor appropriately. */
     function void printInt(int i) {
+        var int index, it;
+        var Array map;
+        let index = 48 + i;
+        let map = charMaps[index];
+        let it = 0;
+
+        while(it < 11) {
+            let screen[cursorX + it] = map[it];
+            let it = it + 1;
+        }
+
+        if(cursorY + 8 < 64) {
+            let cursorY = cursorY + 8;
+        } else {
+            do Output.println();
+        }
+        return; 
     }
 
     /** Advances the cursor to the beginning of the next line. */

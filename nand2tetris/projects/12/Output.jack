@@ -214,6 +214,8 @@ class Output {
 
     /** Advances the cursor to the beginning of the next line. */
     function void println() {
+        do Output.moveCursor(cursorX + 11, 0);
+        return;
     }
 
     /** Moves the cursor one column back. */

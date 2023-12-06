@@ -32,6 +32,10 @@ class Math {
         return;
     }
 
+    function int getPower(int i) {
+        return twoToThe[i];
+    }
+
     function boolean bit(int x, int i) {
         var int isOn;
         let isOn = x & twoToThe[i];

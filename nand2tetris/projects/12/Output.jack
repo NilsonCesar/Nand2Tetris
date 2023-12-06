@@ -185,6 +185,7 @@ class Output {
     function void moveCursor(int i, int j) {
         let cursorX = i;
         let cursorY = j;
+        return;
     }
 
     /** Displays the given character at the cursor location,
@@ -195,7 +196,8 @@ class Output {
         let i = 0;
         let map = Output.getMap(c);
         while(i < 11) {
-            let screen[cursorX + i] = map[i];
+            let screen[cursorX] = map[i];
+            do Output.moveCursor(cursorX + 11, cursorY);
             let i = i + 1;
         }
         
@@ -210,6 +212,7 @@ class Output {
     /** displays the given string starting at the cursor location,
      *  and advances the cursor appropriately. */
     function void printString(String s) {
+        return;
     }
 
     /** Displays the given integer starting at the cursor location,

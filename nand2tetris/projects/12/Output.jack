@@ -219,7 +219,11 @@ class Output {
 
     /** Advances the cursor to the beginning of the next line. */
     function void println() {
-        do Output.moveCursor(cursorX + 11, 0);
+        if(cursorX + 11 < 23) {
+            do Output.moveCursor(cursorX + 11, 0);
+        } else {
+            do Output.moveCursor(0, 0);
+        }
         return;
     }
 

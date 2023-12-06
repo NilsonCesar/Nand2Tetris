@@ -198,7 +198,12 @@ class Output {
             let screen[cursorX + i] = map[i];
             let i = i + 1;
         }
-        let cursorY = cursorY + 8;
+        
+        if(cursorY + 8 < 64) {
+            let cursorY = cursorY + 8;
+        } else {
+            do Output.println();
+        }
         return; 
     }
 

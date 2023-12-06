@@ -80,7 +80,7 @@ class Keyboard {
 
             if(~(c = String.backSpace())) {
                 do str.appendChar(c);
-            } else (c = String.backSpace()) {
+            } else {
                 do Output.backSpace();
             }
         }
@@ -95,5 +95,50 @@ class Keyboard {
      * entered text is detected). Also handles user backspaces. 
      */
     function int readInt(String message) {
+        var boolean negative;
+        var string intStr;
+        var char c;
+        var int num, power, idx, size, j, power10;
+        let negative = false;
+        let num = 0;
+        let idx = 0;
+        let j = 0;
+        let intStr = String.new(0);
+
+        do Output.printString(message);
+        while(true) {
+            let c = Keyboard.readChar();
+            if(c = String.newline()) {
+                let size = strInt.length();
+                let power = size - 1;
+                while(i < size) {
+                    let j = 0;
+                    let power10 = 1;
+                    while(j < power) {
+                        let power10 = Math.multiply(power10, 10);
+                        let j = j + 1;
+                    }
+                    num = num + ((strInt.charAt(i) - 48) * power10)
+                    let power = power - 1;
+                    let i = i + 1;
+                }
+                if(negative) {
+                    num = -num;
+                }
+                return num;
+            }
+
+            if(~(c = String.backSpace())) {
+                if(c = 45) {
+                    let negative = true;
+                } else {
+                    do strInt.appendChar(c);
+                }
+            } else {
+                do Output.backSpace();
+            }
+        }
+
+        return num;
     }
 }

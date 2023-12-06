@@ -54,6 +54,12 @@ class Keyboard {
      * of the pressed key.
      */
     function char readChar() {
+        var int c;
+        while(Keyboard.keyPressed() = 0) {}
+        let c = Keyboard.keyPressed();
+        while(~(Keyboard.keyPressed() = 0)) {}
+        do Output.printChar(c);
+        return c;
     }
 
     /**								
@@ -62,6 +68,24 @@ class Keyboard {
      * and returns its value. Also handles user backspaces.
      */
     function String readLine(String message) {
+        var String str;
+        var char c;
+        let str = String.new(0);
+        while(true) {
+            let c = Keyboard.readChar();
+            if(c = String.newline()) {
+                do Output.println();
+                return str;
+            }
+
+            if(~(c = String.backSpace())) {
+                do str.appendChar(c);
+            } else (c = String.backSpace()) {
+                do Output.backSpace();
+            }
+        }
+
+        return str;
     }   
 
     /**								

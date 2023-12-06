@@ -36,6 +36,16 @@ class Keyboard {
      * F1 - F12 = 141 - 152
      */
     function char keyPressed() {
+        var int op;
+        let op = keyboard[0];
+        if(op = 128) {
+            return String.newline();
+        }
+        if(op = 129) {
+            return String.backspace();
+        } else {
+            return op;
+        }
     }
 
     /**								

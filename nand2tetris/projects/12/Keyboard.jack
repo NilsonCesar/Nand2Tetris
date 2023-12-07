@@ -12,7 +12,7 @@ class Keyboard {
     /** Initializes the keyboard. */
     function void init() {
         let keyboard = 24576;
-        return 0;
+        return;
     } 
 
     /**
@@ -36,13 +36,14 @@ class Keyboard {
      * F1 - F12 = 141 - 152
      */
     function char keyPressed() {
-        var int op;
+        var char op;
         let op = keyboard[0];
+        
         if(op = 128) {
-            return String.newline();
+            return String.newLine();
         }
         if(op = 129) {
-            return String.backspace();
+            return String.backSpace();
         } else {
             return op;
         }
@@ -54,11 +55,13 @@ class Keyboard {
      * of the pressed key.
      */
     function char readChar() {
-        var int c;
+        var char c;
         while(Keyboard.keyPressed() = 0) {}
         let c = Keyboard.keyPressed();
         while(~(Keyboard.keyPressed() = 0)) {}
-        do Output.printChar(c);
+        if(c < 129) {
+            do Output.printChar(c);
+        }
         return c;
     }
 
@@ -70,10 +73,12 @@ class Keyboard {
     function String readLine(String message) {
         var String str;
         var char c;
-        let str = String.new(0);
+        let str = String.new(20);
+        do Output.printString(message);
+
         while(true) {
             let c = Keyboard.readChar();
-            if(c = String.newline()) {
+            if(c = String.newLine()) {
                 do Output.println();
                 return str;
             }
@@ -82,6 +87,7 @@ class Keyboard {
                 do str.appendChar(c);
             } else {
                 do Output.backSpace();
+                do str.eraseLastChar();
             }
         }
 
@@ -96,19 +102,19 @@ class Keyboard {
      */
     function int readInt(String message) {
         var boolean negative;
-        var string intStr;
+        var String strInt;
         var char c;
-        var int num, power, idx, size, j, power10;
+        var int num, power, i, size, j, power10;
         let negative = false;
         let num = 0;
-        let idx = 0;
+        let i = 0;
         let j = 0;
-        let intStr = String.new(0);
+        let strInt = String.new(20);
 
         do Output.printString(message);
         while(true) {
             let c = Keyboard.readChar();
-            if(c = String.newline()) {
+            if(c = String.newLine()) {
                 let size = strInt.length();
                 let power = size - 1;
                 while(i < size) {
@@ -118,12 +124,12 @@ class Keyboard {
                         let power10 = Math.multiply(power10, 10);
                         let j = j + 1;
                     }
-                    num = num + ((strInt.charAt(i) - 48) * power10)
+                    let num = num + ((strInt.charAt(i) - 48) * power10);
                     let power = power - 1;
                     let i = i + 1;
                 }
                 if(negative) {
-                    num = -num;
+                    let num = -num;
                 }
                 return num;
             }
@@ -136,6 +142,7 @@ class Keyboard {
                 }
             } else {
                 do Output.backSpace();
+                do strInt.eraseLastChar();
             }
         }
 

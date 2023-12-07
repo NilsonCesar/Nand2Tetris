@@ -191,21 +191,31 @@ class Output {
     /** Displays the given character at the cursor location,
      *  and advances the cursor one column forward. */
     function void printChar(char c) {
-        var int i, address, x, y;
+        var int i, address, x, y, j;
         var Array map;
         let i = 0;
         let x = cursorX;
         let y = cursorY;
         let map = Output.getMap(c);
+
         while(i < 11) {
             let address = Math.multiply(y, 32) + Math.divide(x, 16);
-            let screen[address] = map[i];
-            let x = x + 1;
+            if(Math.divide(x, 8) = 0) {
+                let screen[address] = map[i];
+            } else {
+                let j = 0;
+                while(j < 8) {
+                    let screen[address] = Math.multiply(screen[address], 2);
+                    let j = j + 1;
+                }
+                let screen[address] = screen[address] | map[i];
+            }
+            let y = y + 1;
             let i = i + 1;
         }
         
-        if(cursorY + 8 < 64) {
-            let cursorY = cursorY + 8;
+        if(cursorX + 8 < 64) {
+            let cursorX = cursorX + 8;
         } else {
             do Output.println();
         }

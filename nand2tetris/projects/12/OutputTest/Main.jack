@@ -10,6 +10,10 @@ class Main {
      *  methods of the Output class. */
     function void main() {
         do Output.printChar(66);
+        do Output.printChar(66);
+        do Output.printChar(66);
+        do Output.printChar(66);
+        do Output.printChar(66);
         return;
     }
 }

@@ -12,9 +12,12 @@
  * data types.
  */
 class Array {
+    field int mem;
 
     /** Constructs a new Array of the given size. */
     function Array new(int size) {
+        let mem = Memory.alloc(size);
+        return mem;
     }
 
     /** Disposes this array. */

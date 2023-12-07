@@ -1594,7 +1594,7 @@ label WHILE_END0
 push static 0
 push constant 8
 add
-push constant 64
+push constant 512
 lt
 if-goto IF_TRUE1
 goto IF_FALSE1
@@ -1610,7 +1610,29 @@ pop temp 0
 label IF_END1
 push constant 0
 return
-function Output.printString 0
+function Output.printString 2
+push constant 0
+pop local 0
+push argument 0
+call String.length 1
+pop local 1
+label WHILE_EXP0
+push local 0
+push local 1
+lt
+not
+if-goto WHILE_END0
+push argument 0
+push local 0
+call String.charAt 2
+call Output.printChar 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
 push constant 0
 return
 function Output.printInt 3
@@ -1672,18 +1694,18 @@ label IF_END0
 push constant 0
 return
 function Output.println 0
-push static 0
+push static 1
 push constant 11
 add
-push constant 23
+push constant 256
 lt
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push static 0
+push constant 0
+push static 1
 push constant 11
 add
-push constant 0
 call Output.moveCursor 2
 pop temp 0
 goto IF_END0

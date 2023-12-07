@@ -9,11 +9,7 @@ class Main {
     /** Outputs the entire character set to the screen using all the
      *  methods of the Output class. */
     function void main() {
-        do Output.printChar(66);
-        do Output.printChar(66);
-        do Output.printChar(66);
-        do Output.printChar(66);
-        do Output.printChar(66);
+        do Output.printString("World");
         return;
     }
 }

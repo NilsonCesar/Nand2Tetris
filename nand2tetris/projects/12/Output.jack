@@ -214,7 +214,7 @@ class Output {
             let i = i + 1;
         }
         
-        if(cursorX + 8 < 64) {
+        if(cursorX + 8 < 512) {
             let cursorX = cursorX + 8;
         } else {
             do Output.println();
@@ -225,6 +225,13 @@ class Output {
     /** displays the given string starting at the cursor location,
      *  and advances the cursor appropriately. */
     function void printString(String s) {
+        var int i, n;
+        let i = 0;
+        let n = s.length();
+        while(i < n) {
+            do Output.printChar(s.charAt(i));
+            let i = i + 1;
+        }
         return;
     }
 
@@ -252,8 +259,8 @@ class Output {
 
     /** Advances the cursor to the beginning of the next line. */
     function void println() {
-        if(cursorX + 11 < 23) {
-            do Output.moveCursor(cursorX + 11, 0);
+        if(cursorY + 11 < 256) {
+            do Output.moveCursor(0, cursorY + 11);
         } else {
             do Output.moveCursor(0, 0);
         }

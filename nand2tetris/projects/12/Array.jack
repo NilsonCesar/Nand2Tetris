@@ -12,7 +12,7 @@
  * data types.
  */
 class Array {
-    field int mem;
+    static int mem;
 
     /** Constructs a new Array of the given size. */
     function Array new(int size) {
@@ -22,7 +22,7 @@ class Array {
 
     /** Disposes this array. */
     method void dispose() {
-        do Memory.dispose(mem);
+        do Memory.deAlloc(mem);
         return;
     }
 }

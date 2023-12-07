@@ -11,10 +11,15 @@
  * string-oriented operations.
  */
 class String {
+    var int length;
+    var Array str;
 
     /** constructs a new empty string with a maximum length of maxLength
      *  and initial length of 0. */
     constructor String new(int maxLength) {
+        let str = Array.new(maxLength);
+        let length = 0;
+        return this;
     }
 
     /** Disposes this string. */

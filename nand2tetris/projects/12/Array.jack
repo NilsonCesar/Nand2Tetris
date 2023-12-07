@@ -22,5 +22,7 @@ class Array {
 
     /** Disposes this array. */
     method void dispose() {
+        do Memory.dispose(mem);
+        return;
     }
 }

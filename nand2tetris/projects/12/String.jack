@@ -24,6 +24,9 @@ class String {
 
     /** Disposes this string. */
     method void dispose() {
+        let str.dispose();
+        let length = 0;
+        return;
     }
 
     /** Returns the current length of this string. */

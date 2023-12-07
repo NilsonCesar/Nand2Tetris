@@ -16,6 +16,7 @@ class Sys {
         do Output.init();
         do Screen.init();
         do Main.main();
+        do Sys.halt();
         return;
     }
 
@@ -30,7 +31,7 @@ class Sys {
         var int i, count;
         let i = duration;
         while(i > 0) {
-            let count = 1000;
+            let count = 150;
             while(count > 0) {
                 let count = count - 1;
             }

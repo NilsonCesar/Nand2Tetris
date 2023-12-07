@@ -21,6 +21,8 @@ class Sys {
 
     /** Halts the program execution. */
     function void halt() {
+        while(true) {};
+        return;
     }
 
     /** Waits approximately duration milliseconds and returns.  */

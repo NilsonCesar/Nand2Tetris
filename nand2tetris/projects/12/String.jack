@@ -61,6 +61,21 @@ class String {
     /** Returns the integer value of this string, 
      *  until a non-digit character is detected. */
     method int intValue() {
+        var int power, i, power10, result, n;
+        let n = length();
+        let i = n - 1;
+        let result = 0;
+        while(i > -1) {
+            let power = i;
+            let power10 = 1;
+            while(power > -1) {
+                power10 = Math.multiply(power10, 10);
+                let power = power - 1;
+            }
+            let result = result + (str[n - i - 1] * power10);
+            let i = i - 1;
+        }
+        return result;
     }
 
     /** Sets this string to hold a representation of the given value. */

@@ -80,6 +80,18 @@ class String {
 
     /** Sets this string to hold a representation of the given value. */
     method void setInt(int val) {
+        var int lastDigit, intDivision;
+        var char c;
+        let intDivision = Math.divide(val, 10)
+        let lastDigit = val - (intDivision * 10);
+        let c = lastDigit + 48;
+        if(val < 10) {
+            do appendChar(c);
+        } else {
+            do setInt(intDivision);
+            do appendChar(c);
+        }
+        return;
     }
 
     /** Returns the new line character. */

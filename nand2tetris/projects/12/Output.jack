@@ -191,13 +191,16 @@ class Output {
     /** Displays the given character at the cursor location,
      *  and advances the cursor one column forward. */
     function void printChar(char c) {
-        var int i;
+        var int i, address, x, y;
         var Array map;
         let i = 0;
+        let x = cursorX;
+        let y = cursorY;
         let map = Output.getMap(c);
         while(i < 11) {
-            let screen[cursorX] = map[i];
-            do Output.moveCursor(cursorX + 11, cursorY);
+            let address = Math.multiply(y, 32) + Math.divide(x, 16);
+            let screen[address] = map[i];
+            let x = x + 1;
             let i = i + 1;
         }
         

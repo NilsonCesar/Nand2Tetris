@@ -339,6 +339,11 @@ push argument 3
 push argument 1
 sub
 pop local 4
+push constant 1
+pop local 0
+push constant 1
+neg
+pop local 1
 label WHILE_EXP3
 push local 0
 push local 3

@@ -31,11 +31,12 @@ class String {
 
     /** Returns the current length of this string. */
     method int length() {
-        return length + 1;
+        return length;
     }
 
     /** Returns the character at the j-th location of this string. */
     method char charAt(int j) {
+        return 
     }
 
     /** Sets the character at the j-th location of this string to c. */

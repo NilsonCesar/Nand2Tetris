@@ -106,5 +106,6 @@ class String {
 
     /** Returns the double quote (") character. */
     function char doubleQuote() {
+        return 34;
     }
 }

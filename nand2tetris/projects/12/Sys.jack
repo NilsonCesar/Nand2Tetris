@@ -44,6 +44,7 @@ class Sys {
     function void error(int errorCode) {
         do Output.printString("ERR");
         do Output.printInt(errorCode);
+        do halt();
         return;
     }
 }

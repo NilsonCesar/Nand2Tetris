@@ -54,6 +54,8 @@ class String {
 
     /** Erases the last character from this string. */
     method void eraseLastChar() {
+        let length = length - 1;
+        return;
     }
 
     /** Returns the integer value of this string, 

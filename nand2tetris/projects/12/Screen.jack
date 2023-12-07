@@ -10,10 +10,12 @@
  * the screen is indexed (0,0).
  */
 class Screen {
+    static Array screen;
     static int color;
 
     /** Initializes the Screen. */
     function void init() {
+        let screen = 16384;
         let color = 1;
         return;
     }
@@ -42,16 +44,17 @@ class Screen {
         var int address, value, remainder;
         var boolean in;
         let address = Math.multiply(y, 32) + Math.divide(x, 16);
-        let value = Memory.peek(address + 16384);
+        let value = screen[address];
         let remainder = x - (Math.divide(x, 16) * 16);
-        let in = Math.bit(x, remainder);
-        if (in & ~(color = 1)) {
+        let in = Math.bit(value, remainder);
+        do Screen.setColor(~in);
+        if (color = 0) {
             let value = value - Math.getPower(remainder);
         }
-        if (~in & (color = 1)) {
+        if (color = 1) {
             let value = value + Math.getPower(remainder);
         }
-        do Memory.poke(address + 16384, value);
+        let screen[address] = value;
         return;
     }
 
@@ -63,8 +66,6 @@ class Screen {
         let a = 0;
         let b = 0;
         let diff = 0;
-        let dx = x2 - x1;
-        let dy = y2 - y1;
 
         if((x1 = x2) & ~doIt) {
             let tmp = Math.min(y1, y2);
@@ -100,6 +101,8 @@ class Screen {
         }
 
         if(((x1 < x2) & (y1 < y2)) & ~doIt) {
+            let dx = x2 - x1;
+            let dy = y2 - y1;
             while(((a < dx) | (a = dx)) & ((b < dy) | (b = dy))) {
                 do Screen.drawPixel(x1 + a, y1 + b);
                 if (diff < 0) {
@@ -113,7 +116,7 @@ class Screen {
             let doIt = true;
         }
 
-        if((x1 > x2) & (y2 > y1)) {
+        if((x1 < x2) & (y2 < y1)) {
             let tmp = x1;
             let x1 = x2;
             let x2 = tmp;
@@ -122,14 +125,17 @@ class Screen {
             let y2 = tmp;
         }
 
-        while((((a < dx) | (a = dx)) & ((b > dy) | (b = dy))) & ~doIt) {
+        let dx = x2 - x1;
+        let dy = y2 - y1;
+
+        while((((a > dx) | (a = dx)) & ((b < dy) | (b = dy))) & ~doIt) {
             do Screen.drawPixel(x1 + a, y1 + b);
             if(diff < 0) {
-                let b = b - 1;
-                let diff = diff + dx;
+                let a = a - 1;
+                let diff = diff + dy;
             } else {
-                let a = a + 1;
-                let diff = diff - dy;
+                let b = b + 1;
+                let diff = diff + dx;
             }
         }
 

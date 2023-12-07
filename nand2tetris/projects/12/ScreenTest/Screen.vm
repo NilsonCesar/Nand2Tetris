@@ -1,6 +1,8 @@
 function Screen.init 0
-push constant 1
+push constant 16384
 pop static 0
+push constant 1
+pop static 1
 push constant 0
 return
 function Screen.clearScreen 0
@@ -9,8 +11,8 @@ call Screen.setColor 1
 pop temp 0
 push constant 0
 push constant 0
-push constant 511
 push constant 255
+push constant 511
 call Screen.drawRectangle 4
 pop temp 0
 push constant 0
@@ -25,11 +27,11 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push constant 1
-pop static 0
+pop static 1
 goto IF_END0
 label IF_FALSE0
 push constant 0
-pop static 0
+pop static 1
 label IF_END0
 push constant 0
 return
@@ -43,9 +45,10 @@ call Math.divide 2
 add
 pop local 0
 push local 0
-push constant 16384
+push static 0
 add
-call Memory.peek 1
+pop pointer 1
+push that 0
 pop local 1
 push argument 0
 push argument 0
@@ -55,16 +58,17 @@ push constant 16
 call Math.multiply 2
 sub
 pop local 2
-push argument 0
+push local 1
 push local 2
 call Math.bit 2
 pop local 3
 push local 3
-push static 0
-push constant 1
-eq
 not
-and
+call Screen.setColor 1
+pop temp 0
+push static 1
+push constant 0
+eq
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
@@ -74,12 +78,9 @@ call Math.getPower 1
 sub
 pop local 1
 label IF_FALSE0
-push local 3
-not
-push static 0
+push static 1
 push constant 1
 eq
-and
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
@@ -90,11 +91,13 @@ add
 pop local 1
 label IF_FALSE1
 push local 0
-push constant 16384
+push static 0
 add
 push local 1
-call Memory.poke 2
 pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
 push constant 0
 return
 function Screen.drawLine 7
@@ -106,14 +109,6 @@ push constant 0
 pop local 1
 push constant 0
 pop local 2
-push argument 2
-push argument 0
-sub
-pop local 3
-push argument 3
-push argument 1
-sub
-pop local 4
 push argument 0
 push argument 2
 eq
@@ -248,6 +243,14 @@ and
 if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
+push argument 2
+push argument 0
+sub
+pop local 3
+push argument 3
+push argument 1
+sub
+pop local 4
 label WHILE_EXP2
 push local 0
 push local 3
@@ -307,10 +310,10 @@ pop local 6
 label IF_FALSE3
 push argument 0
 push argument 2
-gt
+lt
 push argument 3
 push argument 1
-gt
+lt
 and
 if-goto IF_TRUE5
 goto IF_FALSE5
@@ -328,17 +331,25 @@ pop argument 1
 push local 5
 pop argument 3
 label IF_FALSE5
+push argument 2
+push argument 0
+sub
+pop local 3
+push argument 3
+push argument 1
+sub
+pop local 4
 label WHILE_EXP3
 push local 0
 push local 3
-lt
+gt
 push local 0
 push local 3
 eq
 or
 push local 1
 push local 4
-gt
+lt
 push local 1
 push local 4
 eq
@@ -363,23 +374,23 @@ lt
 if-goto IF_TRUE6
 goto IF_FALSE6
 label IF_TRUE6
-push local 1
+push local 0
 push constant 1
 sub
-pop local 1
+pop local 0
 push local 2
-push local 3
+push local 4
 add
 pop local 2
 goto IF_END6
 label IF_FALSE6
-push local 0
+push local 1
 push constant 1
 add
-pop local 0
+pop local 1
 push local 2
-push local 4
-sub
+push local 3
+add
 pop local 2
 label IF_END6
 goto WHILE_EXP3

@@ -83,14 +83,7 @@ class Screen {
         }
 
         if((y1 = y2) & ~doIt) {
-            let tmp = Math.min(x1, x2);
-            let x2 = Math.max(x1, x2);
-            let x1 = tmp;
-            
-            while(((a + x1) < x2) | ((a + x1) = x2)) {
-                do Screen.drawPixel(x1 + a, y1);
-                let a = a + 1;
-            }
+            do Screen.drawHorizontalLine(x1, x2, y1);
             let doIt = true;
         }
 
@@ -169,6 +162,54 @@ class Screen {
             do Screen.drawLine(x - dx, y + dy, x + dx, y + dy);
             let dy = dy + 1;
         }
+        return;
+    }
+
+    function void drawHorizontalLine(int x1, int x2, int y) {
+        var int tmp, remainder, value, address;
+        var boolean in;
+        let tmp = Math.min(x1, x2);
+        let x2 = Math.max(x1, x2);
+        let x1 = tmp;
+        let remainder = x1 - (Math.divide(x1, 16) * 16);
+
+        while(~(remainder = 0) & (x1 < x2) | (x1 = x2)) {
+            do Screen.drawPixel(x1, y);
+            let x1 = x1 + 1;
+            let remainder = x1 - (Math.divide(x1, 16) * 16);
+        }
+
+        let address = Math.multiply(y, 32) + Math.divide(x1, 16);
+        let value = screen[address];
+        let in = Math.bit(value, remainder);
+        do Screen.setColor(~in);
+
+        if(color = 1) {
+            let tmp = -1;
+        } else {
+            let tmp = 0;
+        }
+
+        while((x1 + 16 < x2) | (x1 + 16 = x2)) {
+            let screen[address] = tmp;
+            let x1 = x1 + 16;
+            let address = Math.multiply(y, 32) + Math.divide(x1, 16);
+        }
+
+        if(x1 > x2) {
+            return;
+        }
+
+        let address = Math.multiply(y, 32) + Math.divide(x1, 16);
+        let value = screen[address];
+        let in = Math.bit(value, remainder);
+        do Screen.setColor(~in);
+
+        while((x1 < x2) | (x1 = x2)) {
+            do Screen.drawPixel(x1, y);
+            let x1 = x1 + 1;
+        }
+        
         return;
     }
 }

@@ -22,9 +22,12 @@ class Screen {
 
     /** Erases the entire screen. */
     function void clearScreen() {
-        do Screen.setColor(false);
-        do Screen.drawRectangle(0, 0, 255, 511);
-        do Screen.setColor(true);
+        var int i;
+        let i = 0;
+        while(i < 8192) {
+            let screen[i] = 0;
+            let i = i + 1;
+        }
         return;
     }
 

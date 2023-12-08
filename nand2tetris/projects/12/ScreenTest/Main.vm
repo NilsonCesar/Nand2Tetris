@@ -5,6 +5,8 @@ push constant 511
 push constant 220
 call Screen.drawLine 4
 pop temp 0
+call Screen.clearScreen 0
+pop temp 0
 push constant 280
 push constant 90
 push constant 410

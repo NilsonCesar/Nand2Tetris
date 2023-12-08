@@ -490,15 +490,15 @@ push constant 0
 call Output.create 12
 pop temp 0
 push constant 65
-push constant 0
-push constant 0
-push constant 0
-push constant 0
-push constant 0
-push constant 0
-push constant 0
-push constant 0
-push constant 0
+push constant 12
+push constant 30
+push constant 51
+push constant 51
+push constant 63
+push constant 51
+push constant 51
+push constant 51
+push constant 51
 push constant 0
 push constant 0
 call Output.create 12
@@ -1482,9 +1482,13 @@ pop pointer 1
 push that 0
 return
 function Output.moveCursor 0
-push argument 0
-pop static 0
 push argument 1
+push constant 8
+call Math.multiply 2
+pop static 0
+push argument 0
+push constant 11
+call Math.multiply 2
 pop static 1
 push constant 0
 return
@@ -1739,7 +1743,7 @@ function Output.println 0
 push static 1
 push constant 11
 add
-push constant 256
+push constant 253
 lt
 if-goto IF_TRUE0
 goto IF_FALSE0

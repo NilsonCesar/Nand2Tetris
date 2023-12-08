@@ -1488,43 +1488,53 @@ push argument 1
 pop static 1
 push constant 0
 return
-function Output.printChar 6
+function Output.printChar 9
 push constant 0
-pop local 0
+pop local 1
 push static 0
-pop local 2
-push static 1
+push constant 16
+call Math.divide 2
 pop local 3
+push static 0
+push constant 8
+call Math.divide 2
+pop local 4
+push local 4
+push local 4
+push constant 2
+call Math.divide 2
+push constant 2
+call Math.multiply 2
+sub
+push constant 0
+eq
+pop local 0
+push static 1
+push constant 32
+call Math.multiply 2
+pop local 7
 push argument 0
 call Output.getMap 1
-pop local 5
+pop local 8
 label WHILE_EXP0
-push local 0
+push local 1
 push constant 11
 lt
 not
 if-goto WHILE_END0
+push local 7
 push local 3
-push constant 32
-call Math.multiply 2
-push local 2
-push constant 16
-call Math.divide 2
 add
-pop local 1
-push local 2
-push constant 8
-call Math.divide 2
-push constant 0
-eq
+pop local 2
+push local 0
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push local 1
+push local 2
 push static 2
 add
-push local 0
-push local 5
+push local 1
+push local 8
 add
 pop pointer 1
 push that 0
@@ -1535,60 +1545,52 @@ pop that 0
 goto IF_END0
 label IF_FALSE0
 push constant 0
-pop local 4
+pop local 5
+push local 1
+push local 8
+add
+pop pointer 1
+push that 0
+pop local 6
 label WHILE_EXP1
-push local 4
+push local 5
 push constant 8
 lt
 not
 if-goto WHILE_END1
-push local 1
-push static 2
-add
-push local 1
-push static 2
-add
-pop pointer 1
-push that 0
+push local 6
 push constant 2
 call Math.multiply 2
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
-push local 4
+pop local 6
+push local 5
 push constant 1
 add
-pop local 4
+pop local 5
 goto WHILE_EXP1
 label WHILE_END1
-push local 1
+push local 2
 push static 2
 add
-push local 1
+push local 2
 push static 2
 add
 pop pointer 1
 push that 0
-push local 0
-push local 5
-add
-pop pointer 1
-push that 0
+push local 6
 or
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
 label IF_END0
-push local 3
+push local 7
+push constant 32
+add
+pop local 7
+push local 1
 push constant 1
 add
-pop local 3
-push local 0
-push constant 1
-add
-pop local 0
+pop local 1
 goto WHILE_EXP0
 label WHILE_END0
 push static 0

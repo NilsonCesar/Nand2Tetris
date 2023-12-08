@@ -9,7 +9,7 @@ class Main {
     /** Outputs the entire character set to the screen using all the
      *  methods of the Output class. */
     function void main() {
-        do Output.printString("World");
+        do Output.printString("Hello World");
         return;
     }
 }

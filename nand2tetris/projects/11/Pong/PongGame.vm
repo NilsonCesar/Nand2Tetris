@@ -90,12 +90,12 @@ return
 function PongGame.run 1
 push argument 0
 pop pointer 0
-label $PongGame1
+label WHILE_EXP0
 push this 3
 not
 not
-if-goto $PongGame2
-label $PongGame3
+if-goto WHILE_END0
+label WHILE_EXP1
 push local 0
 push constant 0
 eq
@@ -103,7 +103,7 @@ push this 3
 not
 and
 not
-if-goto $PongGame4
+if-goto WHILE_END1
 call Keyboard.keyPressed 0
 pop local 0
 push this 0
@@ -115,44 +115,45 @@ pop temp 0
 push constant 50
 call Sys.wait 1
 pop temp 0
-goto $PongGame3
-label $PongGame4
+goto WHILE_EXP1
+label WHILE_END1
 push local 0
 push constant 130
 eq
-not
-if-goto $PongGame5
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
 push this 0
 push constant 1
 call Bat.setDirection 2
 pop temp 0
-goto $PongGame6
-label $PongGame5
+goto IF_END0
+label IF_FALSE0
 push local 0
 push constant 132
 eq
-not
-if-goto $PongGame7
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
 push this 0
 push constant 2
 call Bat.setDirection 2
 pop temp 0
-goto $PongGame8
-label $PongGame7
+goto IF_END1
+label IF_FALSE1
 push local 0
 push constant 140
 eq
-not
-if-goto $PongGame9
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
 push constant 0
 not
 pop this 3
-goto $PongGame10
-label $PongGame9
-label $PongGame10
-label $PongGame8
-label $PongGame6
-label $PongGame11
+label IF_FALSE2
+label IF_END1
+label IF_END0
+label WHILE_EXP2
 push local 0
 push constant 0
 eq
@@ -161,7 +162,7 @@ push this 3
 not
 and
 not
-if-goto $PongGame12
+if-goto WHILE_END2
 call Keyboard.keyPressed 0
 pop local 0
 push this 0
@@ -173,13 +174,14 @@ pop temp 0
 push constant 50
 call Sys.wait 1
 pop temp 0
-goto $PongGame11
-label $PongGame12
-goto $PongGame1
-label $PongGame2
+goto WHILE_EXP2
+label WHILE_END2
+goto WHILE_EXP0
+label WHILE_END0
 push this 3
-not
-if-goto $PongGame13
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push constant 10
 push constant 27
 call Output.moveCursor 2
@@ -206,9 +208,7 @@ push constant 114
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
-goto $PongGame14
-label $PongGame13
-label $PongGame14
+label IF_FALSE3
 push constant 0
 return
 function PongGame.moveBall 5
@@ -225,8 +225,9 @@ push this 5
 eq
 not
 and
-not
-if-goto $PongGame15
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
 push this 2
 pop this 5
 push constant 0
@@ -246,8 +247,9 @@ pop local 4
 push this 2
 push constant 4
 eq
-not
-if-goto $PongGame17
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
 push local 1
 push local 4
 gt
@@ -258,33 +260,34 @@ or
 pop this 3
 push this 3
 not
-not
-if-goto $PongGame19
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
 push local 4
 push local 1
 push constant 10
 add
 lt
-not
-if-goto $PongGame21
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push constant 1
 neg
 pop local 0
-goto $PongGame22
-label $PongGame21
+goto IF_END3
+label IF_FALSE3
 push local 3
 push local 2
 push constant 10
 sub
 gt
-not
-if-goto $PongGame23
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
 push constant 1
 pop local 0
-goto $PongGame24
-label $PongGame23
-label $PongGame24
-label $PongGame22
+label IF_FALSE4
+label IF_END3
 push this 6
 push constant 2
 sub
@@ -304,18 +307,12 @@ pop temp 0
 push this 4
 call Output.printInt 1
 pop temp 0
-goto $PongGame20
-label $PongGame19
-label $PongGame20
-goto $PongGame18
-label $PongGame17
-label $PongGame18
+label IF_FALSE2
+label IF_FALSE1
 push this 1
 push local 0
 call Ball.bounce 2
 pop temp 0
-goto $PongGame16
-label $PongGame15
-label $PongGame16
+label IF_FALSE0
 push constant 0
 return

@@ -10,6 +10,10 @@ class Main {
      *  methods of the Output class. */
     function void main() {
         do Output.printString("Hello World");
+        do Output.backSpace();
+        do Output.backSpace();
+        do Output.backSpace();
+        do Output.printChar(66);
         return;
     }
 }

@@ -273,10 +273,10 @@ class Output {
 
     /** Moves the cursor one column back. */
     function void backSpace() {
-        if(cursorY + 8 < 64) {
-            do Output.moveCursor(cursorX, cursorY + 8);
-        } else {
-            do Output.println();
+        if(cursorX - 8 > 0) {
+            let cursorX = cursorX - 8;
+            do Output.printChar(32);
+            let cursorX = cursorX - 8;
         }
         return;
     }

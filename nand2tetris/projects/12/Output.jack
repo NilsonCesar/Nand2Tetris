@@ -242,22 +242,41 @@ class Output {
     /** Displays the given integer starting at the cursor location,
      *  and advances the cursor appropriately. */
     function void printInt(int i) {
-        var int index, it;
+        var int msn, power, it, tmp;
         var Array map;
-        let index = 48 + i;
-        let map = charMaps[index];
-        let it = 0;
+        let power = 0;
 
-        while(it < 11) {
-            let screen[cursorX + it] = map[it];
-            let it = it + 1;
+        if(i < 0) {
+            do Output.printChar(45);
+            let i = -i;
         }
 
-        if(cursorY + 8 < 64) {
-            let cursorY = cursorY + 8;
-        } else {
-            do Output.println();
+        let it = i;
+
+        while(it > 9) {
+            let power = power + 1;
+            let it = Math.divide(it, 10);
         }
+
+        let it = i;
+
+        while(power > -1) {
+            let tmp = power;
+            let msn = it;
+            while(tmp > 0) {
+                let msn = Math.divide(msn, 10);
+                let tmp = tmp - 1;
+            }
+            do Output.printChar(msn + 48);
+            let tmp = power;
+            while(tmp > 0) {
+                let msn = Math.multiply(msn, 10);
+                let tmp = tmp - 1;
+            }
+            let it = it - msn;
+            let power = power - 1;
+        }
+
         return; 
     }
 

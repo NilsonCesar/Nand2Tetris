@@ -1637,62 +1637,102 @@ goto WHILE_EXP0
 label WHILE_END0
 push constant 0
 return
-function Output.printInt 3
-push constant 48
-push argument 0
-add
-pop local 0
-push local 0
-push static 3
-add
-pop pointer 1
-push that 0
-pop local 2
+function Output.printInt 5
 push constant 0
 pop local 1
-label WHILE_EXP0
-push local 1
-push constant 11
-lt
-not
-if-goto WHILE_END0
-push static 0
-push local 1
-add
-push static 2
-add
-push local 1
-push local 2
-add
-pop pointer 1
-push that 0
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
-push local 1
-push constant 1
-add
-pop local 1
-goto WHILE_EXP0
-label WHILE_END0
-push static 1
-push constant 8
-add
-push constant 64
+push argument 0
+push constant 0
 lt
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push static 1
-push constant 8
-add
-pop static 1
-goto IF_END0
-label IF_FALSE0
-call Output.println 0
+push constant 45
+call Output.printChar 1
 pop temp 0
-label IF_END0
+push argument 0
+neg
+pop argument 0
+label IF_FALSE0
+push argument 0
+pop local 2
+label WHILE_EXP0
+push local 2
+push constant 9
+gt
+not
+if-goto WHILE_END0
+push local 1
+push constant 1
+add
+pop local 1
+push local 2
+push constant 10
+call Math.divide 2
+pop local 2
+goto WHILE_EXP0
+label WHILE_END0
+push argument 0
+pop local 2
+label WHILE_EXP1
+push local 1
+push constant 1
+neg
+gt
+not
+if-goto WHILE_END1
+push local 1
+pop local 3
+push local 2
+pop local 0
+label WHILE_EXP2
+push local 3
+push constant 0
+gt
+not
+if-goto WHILE_END2
+push local 0
+push constant 10
+call Math.divide 2
+pop local 0
+push local 3
+push constant 1
+sub
+pop local 3
+goto WHILE_EXP2
+label WHILE_END2
+push local 0
+push constant 48
+add
+call Output.printChar 1
+pop temp 0
+push local 1
+pop local 3
+label WHILE_EXP3
+push local 3
+push constant 0
+gt
+not
+if-goto WHILE_END3
+push local 0
+push constant 10
+call Math.multiply 2
+pop local 0
+push local 3
+push constant 1
+sub
+pop local 3
+goto WHILE_EXP3
+label WHILE_END3
+push local 2
+push local 0
+sub
+pop local 2
+push local 1
+push constant 1
+sub
+pop local 1
+goto WHILE_EXP1
+label WHILE_END1
 push constant 0
 return
 function Output.println 0

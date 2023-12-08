@@ -283,7 +283,8 @@ class Output {
     /** Advances the cursor to the beginning of the next line. */
     function void println() {
         if(cursorY + 11 < 253) {
-            do Output.moveCursor(0, cursorY + 11);
+            let cursorY = cursorY + 11;
+            let cursorX = 0;
         } else {
             do Output.moveCursor(0, 0);
         }

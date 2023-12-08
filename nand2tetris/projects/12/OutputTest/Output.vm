@@ -1748,12 +1748,12 @@ lt
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push constant 0
 push static 1
 push constant 11
 add
-call Output.moveCursor 2
-pop temp 0
+pop static 1
+push constant 0
+pop static 0
 goto IF_END0
 label IF_FALSE0
 push constant 0
